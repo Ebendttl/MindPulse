@@ -106,6 +106,6 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
           </p>
         </div>
       </div>
-    </div>v>
+    </div>
   );
 }
