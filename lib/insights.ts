@@ -41,8 +41,8 @@ export function getCorrelationInsight(entries: MoodEntry[]): string | null {
       }
     });
 
-    // If a tag is present in at least 50% of the recent low moods, return this correlation
-    if (bestLowTag && maxLowCount >= Math.ceil(recentLowEntries.length / 2)) {
+    // If a tag is present in at least 60% of the recent low moods and logged at least 3 times
+    if (bestLowTag && maxLowCount >= 3 && maxLowCount >= Math.ceil(recentLowEntries.length * 0.6)) {
       return `Your mood tends to be lower on days tagged ${bestLowTag} — logged in ${maxLowCount} of your last ${recentLowEntries.length} low-mood entries.`;
     }
   }
@@ -71,8 +71,8 @@ export function getCorrelationInsight(entries: MoodEntry[]): string | null {
       }
     });
 
-    // If a tag is present in at least 50% of the recent high moods, return this correlation
-    if (bestHighTag && maxHighCount >= Math.ceil(recentHighEntries.length / 2)) {
+    // If a tag is present in at least 60% of the recent high moods and logged at least 3 times
+    if (bestHighTag && maxHighCount >= 3 && maxHighCount >= Math.ceil(recentHighEntries.length * 0.6)) {
       return `Your mood tends to be higher on days tagged ${bestHighTag} — logged in ${maxHighCount} of your last ${recentHighEntries.length} high-mood entries.`;
     }
   }
