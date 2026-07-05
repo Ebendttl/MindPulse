@@ -3,36 +3,62 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════ */
-/* Design Token System                     */
+/* Design Token System (Stunning & Modern)  */
 /* ═══════════════════════════════════════ */
 
 :root {
-  --background: #FAF7F2;
-  --foreground: #2A2622;
+  --background-start: #FCFBF9;
+  --background-end: #F0ECE3;
+  --foreground: #1E1B24;
   --card: #FFFFFF;
-  --card-border: #EDE8DF;
-  --text-primary: #2A2622;
-  --text-secondary: #6B655C;
+  --card-border: #EDE6DA;
+  --text-primary: #1E1B24;
+  --text-secondary: #756F80;
   --brand-primary: #6C63FF;
   --brand-end: #4ECDC4;
 }
 
 .dark {
-  --background: #1A1720;
+  --background-start: #141121;
+  --background-end: #0B0914;
   --foreground: #F5F2ED;
-  --card: #252030;
-  --card-border: #332C40;
+  --card: #1C192B;
+  --card-border: #2C2842;
   --text-primary: #F5F2ED;
-  --text-secondary: #B0A8B8;
+  --text-secondary: #9B94A8;
   --brand-primary: #6C63FF;
   --brand-end: #4ECDC4;
 }
 
+/* Bulletproof base resets using custom properties */
 @layer base {
   body {
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-    background-color: var(--background);
     color: var(--foreground);
+    min-height: 100vh;
+    background: radial-gradient(circle at 10% 20%, var(--background-start) 0%, var(--background-end) 100%) no-repeat fixed;
+  }
+}
+
+/* ═══════════════════════════════════════ */
+/* Explicit Override Utilities             */
+/* Resolves Tailwind opacity wrapping issues */
+/* ═══════════════════════════════════════ */
+@layer utilities {
+  .bg-card {
+    background-color: var(--card) !important;
+  }
+  .bg-background {
+    background-color: var(--background-end) !important;
+  }
+  .border-card-border {
+    border-color: var(--card-border) !important;
+  }
+  .text-text-primary {
+    color: var(--text-primary) !important;
+  }
+  .text-text-secondary {
+    color: var(--text-secondary) !important;
   }
 }
 
