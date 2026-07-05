@@ -348,9 +348,9 @@ export default function Home() {
                 <div className="flex justify-between items-center pt-2">
                   <div className="text-[10px] text-slate-400 dark:text-slate-500 max-w-[200px] sm:max-w-xs leading-normal">
                     {!isTodayLogged && selectedDateIsToday && (
-                      <span className="flex items-center gap-1">
-                        <Info className="w-3 h-3 text-indigo-400 shrink-0" />
-                        {"Log today's mood to keep your logging streak alive!"}
+                      <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                        <Info className="w-3 h-3 text-teal-500 shrink-0" />
+                        {"Whenever you're ready, take a gentle pause here."}
                       </span>
                     )}
                   </div>

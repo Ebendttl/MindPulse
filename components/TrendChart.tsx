@@ -130,7 +130,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
         min: 1,
         max: 6,
         grid: {
-          color: "rgba(241, 245, 249, 0.4)", // light gray
+          color: "rgba(148, 163, 184, 0.12)",
         },
         border: {
           dash: [4, 4],
@@ -158,36 +158,39 @@ export default function TrendChart({ entries }: TrendChartProps) {
       {
         label: "Mood Trend",
         data: chartData.values,
-        borderColor: "#6366f1", // indigo-500
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        backgroundColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-          if (!chartArea) return "rgba(99, 102, 241, 0.1)";
-          
-          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, "rgba(99, 102, 241, 0.35)");
-          gradient.addColorStop(1, "rgba(99, 102, 241, 0.0)");
-          return gradient;
-        },
-        fill: true,
+        borderColor: chartType === "line"
+          ? "rgba(148, 163, 184, 0.35)"
+          : chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex : "transparent"),
+        backgroundColor: chartType === "line"
+          ? (context: any) => {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+              if (!chartArea) return "rgba(20, 184, 166, 0.05)";
+              const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              gradient.addColorStop(0, "rgba(20, 184, 166, 0.15)");
+              gradient.addColorStop(1, "rgba(20, 184, 166, 0.0)");
+              return gradient;
+            }
+          : chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex + "dd" : "transparent"),
+        fill: chartType === "line",
         tension: 0.35,
-        pointBackgroundColor: "#4f46e5", // indigo-600
-        pointBorderColor: "#ffffff",
+        pointBackgroundColor: chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex : "transparent"),
+        pointBorderColor: chartData.values.map((v) => v !== null ? "#ffffff" : "transparent"),
         pointBorderWidth: 2,
-        pointRadius: 5,
-        pointHoverRadius: 7,
+        pointRadius: chartType === "line" ? chartData.values.map((v) => v !== null ? 6 : 0) : 0,
+        pointHoverRadius: chartType === "line" ? 8 : 0,
         spanGaps: true,
+        borderRadius: chartType === "bar" ? 8 : 0,
       },
     ],
   };
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:shadow-md transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className="w-5 h-5 text-indigo-500" />
+            <TrendingUp className="w-5 h-5 text-teal-500" />
             <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mood Trends</h2>
           </div>
           <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
