@@ -93,7 +93,6 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
           {filteredEntries.map((entry) => {
             const mood = MOODS[entry.moodValue];
             const colors = MOOD_COLORS[entry.moodValue];
-            const darkColors = MOOD_COLORS_DARK[entry.moodValue];
 
             return (
               <div
@@ -190,13 +189,6 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
           })}
         </div>
       )}
-
-      {/* Dark mode style overrides for history entries */}
-      <style jsx>{`
-        .dark .space-y-3 > div {
-          background-color: var(--background) !important;
-        }
-      `}</style>
     </div>
   );
 }
