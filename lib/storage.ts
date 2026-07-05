@@ -45,6 +45,7 @@ export function saveMoodEntry(entryData: Omit<MoodEntry, "id" | "timestamp">): M
       ...entries[existingIndex],
       moodValue: entryData.moodValue,
       note: entryData.note?.trim(),
+      tags: entryData.tags || [],
       timestamp, // Update log timestamp to reflect the edit
     };
     entries[existingIndex] = updatedEntry;
@@ -55,6 +56,7 @@ export function saveMoodEntry(entryData: Omit<MoodEntry, "id" | "timestamp">): M
       date: entryData.date,
       moodValue: entryData.moodValue,
       note: entryData.note?.trim(),
+      tags: entryData.tags || [],
       timestamp,
     };
     entries.push(updatedEntry);
