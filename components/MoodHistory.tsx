@@ -35,7 +35,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
   };
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-md transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">

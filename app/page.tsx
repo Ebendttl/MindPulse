@@ -196,10 +196,10 @@ export default function Home() {
   // If component is not mounted, render a calming full-page loading placeholder
   if (!mounted) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="flex-1 flex flex-col items-center justify-center bg-background text-foreground">
         <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-950/40 flex items-center justify-center">
-            <Heart className="w-8 h-8 text-indigo-500 fill-indigo-200 dark:fill-none" />
+          <div className="w-16 h-16 rounded-full bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center">
+            <Heart className="w-8 h-8 text-teal-500 fill-teal-100 dark:fill-none" />
           </div>
           <span className="text-lg font-semibold text-slate-500 dark:text-slate-400">
             Nurturing your mind...
@@ -222,10 +222,10 @@ export default function Home() {
           className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl transition-all duration-300 border animate-slide-in ${
             notification.type === "success"
               ? "bg-emerald-50 border-emerald-100 text-emerald-800 dark:bg-slate-900 dark:border-emerald-900/50 dark:text-emerald-300"
-              : "bg-indigo-50 border-indigo-100 text-indigo-800 dark:bg-slate-900 dark:border-indigo-900/50 dark:text-indigo-300"
+              : "bg-teal-50 border-teal-100 text-teal-800 dark:bg-slate-900 dark:border-teal-900/50 dark:text-teal-300"
           }`}
         >
-          <CheckCircle2 className={`w-5 h-5 ${notification.type === "success" ? "text-emerald-500" : "text-indigo-500"}`} />
+          <CheckCircle2 className={`w-5 h-5 ${notification.type === "success" ? "text-emerald-500" : "text-teal-500"}`} />
           <span className="text-xs font-semibold tracking-wide">{notification.message}</span>
         </div>
       )}
@@ -244,9 +244,9 @@ export default function Home() {
                 Mind<span className="text-indigo-500">Pulse</span>
               </h1>
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-semibold">
               Your mindful compass. Supporting{" "}
-              <span className="text-emerald-500 dark:text-emerald-400 font-semibold">
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                 UN SDG 3: Good Health & Well-being
               </span>
             </p>
@@ -288,7 +288,7 @@ export default function Home() {
           <div className="lg:col-span-6 space-y-6">
             
             {/* Logging reflection Card */}
-            <section className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm">
+            <section className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)]">
               <form onSubmit={handleSave} className="space-y-6">
                 
                 {/* Heading and Date picker */}
@@ -297,13 +297,13 @@ export default function Home() {
                     <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
                       {currentSelectedEntry ? "Edit Reflection" : "Record Reflection"}
                     </h2>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
                       Save a moment to map your mental landscape
                     </p>
                   </div>
  
                   {/* Date Input */}
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-100 dark:border-slate-800 w-full sm:w-auto">
+                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-800 w-full sm:w-auto">
                     <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <input
                       id="log-date"
@@ -323,10 +323,10 @@ export default function Home() {
                       {selectedMood === null ? "1" : "2"}
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-wider">
+                      <h4 className="text-xs font-black text-indigo-950 dark:text-indigo-200 uppercase tracking-wider">
                         {selectedMood === null ? "Welcome to MindPulse" : "Almost there"}
                       </h4>
-                      <p className="text-xs text-indigo-900/90 dark:text-indigo-200 font-semibold mt-0.5 leading-relaxed">
+                      <p className="text-xs text-indigo-950/90 dark:text-indigo-100 font-bold mt-0.5 leading-relaxed">
                         {selectedMood === null
                           ? "Start here — log how you're feeling today by choosing one of the emojis below."
                           : "Great! Next, select any context tags, add an optional reflection note, and click 'Log Reflection'."}
