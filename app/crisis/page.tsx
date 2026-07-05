@@ -1,11 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, Phone, MessageSquare, Heart, ShieldAlert, Sparkles } from "lucide-react";
-
-export const metadata = {
-  title: "Crisis Support Resources | MindPulse",
-  description: "Free, confidential crisis support resources. Aligned with UN SDG 3.",
-};
 
 export default function CrisisPage() {
   return (
@@ -16,6 +13,8 @@ export default function CrisisPage() {
         color: "var(--text-primary)",
       }}
     >
+      <title>Crisis Support Resources | MindPulse</title>
+      <meta name="description" content="Free, confidential crisis support resources. Aligned with UN SDG 3." />
       <main className="flex-grow max-w-3xl w-full mx-auto px-4 py-16 sm:px-6">
         
         {/* Back navigation */}

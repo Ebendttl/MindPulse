@@ -3,24 +3,14 @@
 import React, { useEffect } from "react";
 import { MoodValue } from "@/types";
 import { MOOD_LIST } from "@/lib/moodData";
-import { MOOD_COLORS, MOOD_COLORS_DARK } from "@/lib/moodColors";
+import { MOOD_COLORS } from "@/lib/moodColors";
 
 interface MoodPickerProps {
   selectedMood: MoodValue | null;
   onSelectMood: (value: MoodValue) => void;
 }
 
-/**
- * Helper: detect if dark mode is active by checking the <html> element.
- */
-function isDarkMode(): boolean {
-  if (typeof document === "undefined") return false;
-  return document.documentElement.classList.contains("dark");
-}
-
 export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerProps) {
-  const dark = isDarkMode();
-
   // Print/log the array order to console on load in dev mode for verification
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
@@ -41,7 +31,6 @@ export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerPro
         {MOOD_LIST.map((mood) => {
           const isSelected = selectedMood === mood.value;
           const colors = MOOD_COLORS[mood.value];
-          const darkColors = MOOD_COLORS_DARK[mood.value];
 
           // CARD ELEVATION SYSTEM:
           // Unselected: uses the card surface token, card border, card shadow
