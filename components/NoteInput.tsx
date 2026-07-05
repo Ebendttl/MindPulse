@@ -23,7 +23,8 @@ export default function NoteInput({ note, onChangeNote, maxChars = 200 }: NoteIn
       <div className="flex justify-between items-center mb-2">
         <label
           htmlFor="mood-note"
-          className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider"
+          className="text-xs font-semibold uppercase"
+          style={{ letterSpacing: "0.05em", color: "var(--text-secondary)" }}
         >
           Add some reflections (Optional)
         </label>
@@ -33,8 +34,9 @@ export default function NoteInput({ note, onChangeNote, maxChars = 200 }: NoteIn
               ? "text-rose-500 font-bold animate-pulse"
               : charsLeft <= 50
               ? "text-amber-500"
-              : "text-slate-400 dark:text-slate-500"
+              : ""
           }`}
+          style={charsLeft > 50 ? { color: "var(--text-secondary)" } : undefined}
         >
           {charsLeft} chars left
         </span>
@@ -46,7 +48,14 @@ export default function NoteInput({ note, onChangeNote, maxChars = 200 }: NoteIn
         value={note}
         onChange={handleChange}
         placeholder="How is your day going? What is on your mind? What made you feel this way?"
-        className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white placeholder-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-300 resize-none dark:bg-slate-900/60 dark:border-slate-800 dark:placeholder-slate-500 dark:text-slate-200 dark:focus:ring-teal-500/20 dark:focus:border-teal-500"
+        className="w-full px-4 py-3 rounded-2xl border transition-all duration-300 resize-none outline-none focus:ring-2 focus:ring-offset-1"
+        style={{
+          backgroundColor: "var(--card)",
+          borderColor: "var(--card-border)",
+          color: "var(--text-primary)",
+          // @ts-expect-error CSS custom properties
+          "--tw-ring-color": "#6C63FF40",
+        }}
       />
     </div>
   );

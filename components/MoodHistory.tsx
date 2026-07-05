@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MoodEntry } from "@/types";
 import { MOODS } from "@/lib/moodData";
-import { MOOD_COLORS, MOOD_COLORS_DARK } from "@/lib/moodColors";
+import { MOOD_COLORS } from "@/lib/moodColors";
 import { Trash2, Calendar, Search } from "lucide-react";
 import { BreathingCircleIllustration } from "./MindfulIllustration";
 

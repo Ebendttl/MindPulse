@@ -12,7 +12,7 @@ import MoodHistory from "@/components/MoodHistory";
 import StatsSummary from "@/components/StatsSummary";
 import InsightsCard from "@/components/InsightsCard";
 import Link from "next/link";
-import { Heart, Activity, Sun, Moon, Info, Sparkles, RefreshCw, Calendar, CheckCircle2 } from "lucide-react";
+import { Heart, Activity, Sun, Moon, Info, RefreshCw, Calendar, CheckCircle2, Sparkles } from "lucide-react";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -196,12 +196,15 @@ export default function Home() {
   // If component is not mounted, render a calming full-page loading placeholder
   if (!mounted) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-background text-foreground">
+      <div className="flex-1 flex flex-col items-center justify-center" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
         <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div className="w-16 h-16 rounded-full bg-teal-50 dark:bg-teal-950/40 flex items-center justify-center">
-            <Heart className="w-8 h-8 text-teal-500 fill-teal-100 dark:fill-none" />
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: "#6C63FF1A" }}
+          >
+            <Heart className="w-8 h-8" style={{ color: "#6C63FF" }} />
           </div>
-          <span className="text-lg font-semibold text-slate-500 dark:text-slate-400">
+          <span className="text-lg font-semibold" style={{ color: "var(--text-secondary)" }}>
             Nurturing your mind...
           </span>
         </div>
@@ -219,13 +222,17 @@ export default function Home() {
       {/* Dynamic Notification Banner */}
       {notification && (
         <div
-          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl transition-all duration-300 border animate-slide-in ${
-            notification.type === "success"
-              ? "bg-emerald-50 border-emerald-100 text-emerald-800 dark:bg-slate-900 dark:border-emerald-900/50 dark:text-emerald-300"
-              : "bg-teal-50 border-teal-100 text-teal-800 dark:bg-slate-900 dark:border-teal-900/50 dark:text-teal-300"
-          }`}
+          className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl transition-all duration-300 border animate-slide-in"
+          style={{
+            backgroundColor: "var(--card)",
+            borderColor: notification.type === "success" ? "#8FC97E66" : "#6C63FF40",
+            color: "var(--text-primary)",
+          }}
         >
-          <CheckCircle2 className={`w-5 h-5 ${notification.type === "success" ? "text-emerald-500" : "text-teal-500"}`} />
+          <CheckCircle2
+            className="w-5 h-5"
+            style={{ color: notification.type === "success" ? "#8FC97E" : "#6C63FF" }}
+          />
           <span className="text-xs font-semibold tracking-wide">{notification.message}</span>
         </div>
       )}
@@ -233,44 +240,93 @@ export default function Home() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
         
-        {/* Calming Top Header bar */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-slate-100 dark:border-slate-900 pb-6">
+        {/* ═══════════════════════════════════ */}
+        {/* HEADER — Spec Section 7            */}
+        {/* ═══════════════════════════════════ */}
+        <header
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6"
+          style={{ borderBottom: "1px solid var(--card-border)" }}
+        >
           <div>
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
+              <div
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
+                style={{
+                  background: "linear-gradient(135deg, #6C63FF, #4ECDC4)",
+                  boxShadow: "0 4px 12px rgba(108, 99, 255, 0.25)",
+                }}
+              >
                 <Activity className="w-5 h-5 animate-pulse" />
               </div>
-              <h1 id="main-title" className="text-2xl font-black tracking-tight text-slate-800 dark:text-slate-50">
-                Mind<span className="text-indigo-500">Pulse</span>
+              <h1
+                id="main-title"
+                className="text-2xl font-black tracking-tight"
+                style={{ color: "var(--text-primary)" }}
+              >
+                Mind<span
+                  style={{
+                    background: "linear-gradient(135deg, #6C63FF, #4ECDC4)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >Pulse</span>
               </h1>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-semibold">
-              Your mindful compass. Supporting{" "}
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+            {/* SDG badge — pill shape */}
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <span
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold"
+                style={{
+                  backgroundColor: "#6C63FF1A", // primary at 10% opacity
+                  color: "#6C63FF",
+                }}
+              >
+                <Sparkles className="w-3 h-3" />
                 UN SDG 3: Good Health & Well-being
               </span>
-            </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle Button — icon button, subtle hover */}
             <button
               id="theme-toggle"
               type="button"
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-slate-100 bg-white hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:hover:bg-slate-800/80 text-slate-500 dark:text-slate-400 transition-all duration-300"
+              className="p-2.5 rounded-xl border transition-all duration-300"
+              style={{
+                backgroundColor: "var(--card)",
+                borderColor: "var(--card-border)",
+                color: "var(--text-secondary)",
+              }}
               title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--background)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--card)"; }}
             >
               {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
             
-            {/* Demo Generator Button */}
+            {/* Demo Generator Button — ghost/outline style */}
             <button
               id="demo-data-btn"
               type="button"
               onClick={handlePopulateDemoData}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-900/50 dark:text-emerald-300 dark:hover:bg-emerald-950/40 transition-all duration-300"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-300"
+              style={{
+                backgroundColor: "transparent",
+                border: "1.5px solid var(--text-secondary)",
+                color: "var(--text-secondary)",
+              }}
               title="Populate 14-day history for testing"
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "#6C63FF";
+                (e.currentTarget as HTMLElement).style.color = "#6C63FF";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "var(--text-secondary)";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
+              }}
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Demo Logs</span>
@@ -288,45 +344,75 @@ export default function Home() {
           <div className="lg:col-span-6 space-y-6">
             
             {/* Logging reflection Card */}
-            <section className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)]">
+            <section
+              className="bg-card border border-card-border rounded-[20px] p-6"
+            >
               <form onSubmit={handleSave} className="space-y-6">
                 
                 {/* Heading and Date picker */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                    <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
                       {currentSelectedEntry ? "Edit Reflection" : "Record Reflection"}
                     </h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                    <p className="text-xs mt-0.5 font-medium" style={{ color: "var(--text-secondary)" }}>
                       Save a moment to map your mental landscape
                     </p>
                   </div>
  
                   {/* Date Input */}
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-800 w-full sm:w-auto">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <div
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl border w-full sm:w-auto"
+                    style={{
+                      backgroundColor: "var(--background)",
+                      borderColor: "var(--card-border)",
+                    }}
+                  >
+                    <Calendar className="w-3.5 h-3.5 shrink-0" style={{ color: "var(--text-secondary)" }} />
                     <input
                       id="log-date"
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
                       max={getTodayDateString()}
-                      className="bg-transparent border-none text-xs font-semibold text-slate-600 focus:outline-none dark:text-slate-300 w-full cursor-pointer"
+                      className="bg-transparent border-none text-xs font-semibold focus:outline-none w-full cursor-pointer"
+                      style={{ color: "var(--text-primary)" }}
                     />
                   </div>
                 </div>
 
                 {/* Onboarding Help Box */}
                 {entries.length === 0 && (
-                  <div className="bg-indigo-50/70 dark:bg-indigo-950/20 border border-indigo-150/40 dark:border-indigo-900/40 rounded-2xl p-4 flex items-start gap-3 animate-[pulse_3s_infinite] shadow-sm">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0 text-indigo-500 font-bold text-sm">
+                  <div
+                    className="rounded-2xl p-4 flex items-start gap-3 shadow-sm border"
+                    style={{
+                      backgroundColor: "#6C63FF0D", // primary at 5%
+                      borderColor: "#6C63FF26",     // primary at 15%
+                    }}
+                  >
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-bold text-sm"
+                      style={{
+                        backgroundColor: "#6C63FF1A",
+                        color: "#6C63FF",
+                      }}
+                    >
                       {selectedMood === null ? "1" : "2"}
                     </div>
                     <div>
-                      <h4 className="text-xs font-black text-indigo-950 dark:text-indigo-200 uppercase tracking-wider">
+                      <h4
+                        className="text-xs font-black uppercase"
+                        style={{
+                          letterSpacing: "0.05em",
+                          color: "#6C63FF",
+                        }}
+                      >
                         {selectedMood === null ? "Welcome to MindPulse" : "Almost there"}
                       </h4>
-                      <p className="text-xs text-indigo-950/90 dark:text-indigo-100 font-bold mt-0.5 leading-relaxed">
+                      <p
+                        className="text-xs font-bold mt-0.5 leading-relaxed"
+                        style={{ color: "var(--text-primary)" }}
+                      >
                         {selectedMood === null
                           ? "Start here — log how you're feeling today by choosing one of the emojis below."
                           : "Great! Next, select any context tags, add an optional reflection note, and click 'Log Reflection'."}
@@ -346,10 +432,10 @@ export default function Home() {
 
                 {/* Submit Action Button */}
                 <div className="flex justify-between items-center pt-2">
-                  <div className="text-[10px] text-slate-400 dark:text-slate-500 max-w-[200px] sm:max-w-xs leading-normal">
+                  <div className="text-[10px] max-w-[200px] sm:max-w-xs leading-normal" style={{ color: "var(--text-secondary)" }}>
                     {!isTodayLogged && selectedDateIsToday && (
-                      <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                        <Info className="w-3 h-3 text-teal-500 shrink-0" />
+                      <span className="flex items-center gap-1">
+                        <Info className="w-3 h-3 shrink-0" style={{ color: "#4ECDC4" }} />
                         {"Whenever you're ready, take a gentle pause here."}
                       </span>
                     )}
@@ -358,7 +444,11 @@ export default function Home() {
                   <button
                     id="save-log-btn"
                     type="submit"
-                    className="flex items-center gap-1.5 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all duration-300 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+                    className="flex items-center gap-1.5 px-6 py-3 rounded-2xl text-white font-bold text-sm active:scale-[0.98] transition-all duration-300"
+                    style={{
+                      background: "linear-gradient(135deg, #6C63FF, #5A52E0)",
+                      boxShadow: "0 4px 16px rgba(108, 99, 255, 0.25)",
+                    }}
                   >
                     <span>{currentSelectedEntry ? "Update Entry" : "Log Reflection"}</span>
                   </button>
@@ -386,7 +476,10 @@ export default function Home() {
                   id="clear-all-btn"
                   type="button"
                   onClick={handleClearAllData}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-slate-400 hover:text-rose-500 transition-all duration-300"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all duration-300"
+                  style={{ color: "var(--text-secondary)" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#E8837A"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; }}
                 >
                   <RefreshCw className="w-3 h-3" />
                   <span>Reset All Local Storage Data</span>
@@ -399,23 +492,33 @@ export default function Home() {
       </main>
 
       {/* Calming bottom footer */}
-      <footer className="mt-auto py-8 border-t border-slate-100 dark:border-slate-900 bg-white/30 dark:bg-slate-950/20">
+      <footer
+        className="mt-auto py-8"
+        style={{
+          borderTop: "1px solid var(--card-border)",
+          backgroundColor: "var(--card)",
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-4">
           <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-center sm:text-left">
-              <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+              <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>
                 MindPulse © 2026. Built with mindfulness.
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-              <span>Aligned with</span>
-              <span className="text-emerald-600 dark:text-emerald-400">UN SDG Goal 3: Good Health & Well-being</span>
+            <div className="flex items-center gap-1 text-[11px] font-bold">
+              <span style={{ color: "var(--text-secondary)" }}>Aligned with</span>
+              <span style={{ color: "#6C63FF" }}>UN SDG Goal 3: Good Health & Well-being</span>
             </div>
           </div>
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-900 gap-3">
+          <div
+            className="w-full flex flex-col sm:flex-row justify-between items-center pt-4 gap-3"
+            style={{ borderTop: "1px solid var(--card-border)" }}
+          >
             <Link
               href="/crisis"
-              className="text-[11.5px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-450 dark:hover:text-rose-400 flex items-center gap-1 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-rose-500 rounded px-1.5 py-0.5 outline-none"
+              className="text-[11.5px] font-bold flex items-center gap-1 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-rose-500 rounded px-1.5 py-0.5 outline-none"
+              style={{ color: "#E8837A" }}
             >
               <span>Need to talk to someone? Crisis support resources →</span>
             </Link>
