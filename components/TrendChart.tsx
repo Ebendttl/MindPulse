@@ -162,7 +162,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
           ? "rgba(148, 163, 184, 0.35)"
           : chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex : "transparent"),
         backgroundColor: chartType === "line"
-          ? (context: any) => {
+          ? (context: { chart: { ctx: CanvasRenderingContext2D; chartArea?: { top: number; bottom: number; left: number; right: number; width: number; height: number } } }) => {
               const chart = context.chart;
               const { ctx, chartArea } = chart;
               if (!chartArea) return "rgba(20, 184, 166, 0.05)";

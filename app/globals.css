@@ -2,14 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════ */
+/* Design Token System                     */
+/* ═══════════════════════════════════════ */
+
 :root {
   --background: #FAF7F2;
-  --foreground: #2A2630;
+  --foreground: #2A2622;
+  --card: #FFFFFF;
+  --card-border: #EDE8DF;
+  --text-primary: #2A2622;
+  --text-secondary: #6B655C;
+  --brand-primary: #6C63FF;
+  --brand-end: #4ECDC4;
 }
 
 .dark {
-  --background: #1A1825;
-  --foreground: #FAF7F2;
+  --background: #1A1720;
+  --foreground: #F5F2ED;
+  --card: #252030;
+  --card-border: #332C40;
+  --text-primary: #F5F2ED;
+  --text-secondary: #B0A8B8;
+  --brand-primary: #6C63FF;
+  --brand-end: #4ECDC4;
 }
 
 @layer base {
@@ -20,7 +36,46 @@
   }
 }
 
-/* Custom modern scrollbar styles for historical entries */
+/* ═══════════════════════════════════════ */
+/* Custom Animations                       */
+/* ═══════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes waveMotion {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(8px); }
+}
+
+@keyframes scalePulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translate(-50%, -12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+.animate-wave {
+  animation: waveMotion 4s ease-in-out infinite;
+}
+
+.animate-scale-pulse {
+  animation: scalePulse 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════ */
+/* Scrollbar                               */
+/* ═══════════════════════════════════════ */
+
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
