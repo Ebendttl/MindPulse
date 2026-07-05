@@ -6,9 +6,12 @@ import { getMoodEntries, saveMoodEntry, deleteMoodEntry } from "@/lib/storage";
 
 import MoodPicker from "@/components/MoodPicker";
 import NoteInput from "@/components/NoteInput";
+import TagSelector from "@/components/TagSelector";
 import TrendChart from "@/components/TrendChart";
 import MoodHistory from "@/components/MoodHistory";
 import StatsSummary from "@/components/StatsSummary";
+import InsightsCard from "@/components/InsightsCard";
+import Link from "next/link";
 import { Heart, Activity, Sun, Moon, Info, Sparkles, RefreshCw, Calendar, CheckCircle2 } from "lucide-react";
 
 export default function Home() {
@@ -17,6 +20,7 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedMood, setSelectedMood] = useState<MoodValue | null>(null);
   const [note, setNote] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   
   // Custom notifications state
   const [notification, setNotification] = useState<{ message: string; type: "success" | "info" } | null>(null);
@@ -59,9 +63,11 @@ export default function Home() {
     if (existingEntry) {
       setSelectedMood(existingEntry.moodValue);
       setNote(existingEntry.note || "");
+      setSelectedTags(existingEntry.tags || []);
     } else {
       setSelectedMood(null);
       setNote("");
+      setSelectedTags([]);
     }
   }, [selectedDate, entries]);
 
@@ -93,17 +99,13 @@ export default function Home() {
       date: selectedDate,
       moodValue: selectedMood,
       note: note.trim(),
+      tags: selectedTags,
     });
 
     // Refresh state
     setEntries(getMoodEntries());
 
-    const isToday = selectedDate === getTodayDateString();
-    showNotification(
-      isToday
-        ? `Logged your mood for today! Keep up the self-reflection.`
-        : `Updated your mood log for ${selectedDate}.`
-    );
+    showNotification("Reflection saved ✓");
   };
 
   // Delete entry handler
@@ -147,12 +149,30 @@ export default function Home() {
       const day = String(d.getDate()).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`;
 
+      const sampleTags = [
+        ["Exercise", "Social"], // mood 5
+        ["Sleep"],             // mood 4
+        ["Social"],            // mood 6
+        ["Work", "Sleep"],     // mood 2
+        ["Exercise"],          // mood 5
+        ["Social", "Weather"], // mood 4
+        ["Work"],              // mood 3
+        ["Exercise", "Social"], // mood 5
+        ["Sleep"],             // mood 3
+        ["Work"],              // mood 2
+        ["Exercise", "Social"], // mood 6
+        ["Weather"],           // mood 4
+        ["Work"],              // mood 2
+        ["Exercise"],          // mood 5
+      ];
+
       demoEntries.push({
         id: `demo-${i}`,
         date: dateStr,
         timestamp: d.getTime() - i * 3600000,
         moodValue: sampleMoods[i % sampleMoods.length],
         note: sampleNotes[i % sampleNotes.length],
+        tags: sampleTags[i % sampleTags.length],
       });
     }
 
@@ -293,8 +313,30 @@ export default function Home() {
                   </div>
                 </div>
 
+                {/* Onboarding Help Box */}
+                {entries.length === 0 && (
+                  <div className="bg-indigo-50/70 dark:bg-indigo-950/20 border border-indigo-150/40 dark:border-indigo-900/40 rounded-2xl p-4 flex items-start gap-3 animate-[pulse_3s_infinite] shadow-sm">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0 text-indigo-500 font-bold text-sm">
+                      {selectedMood === null ? "1" : "2"}
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-wider">
+                        {selectedMood === null ? "Welcome to MindPulse" : "Almost there"}
+                      </h4>
+                      <p className="text-xs text-indigo-950 dark:text-slate-350 font-semibold mt-0.5 leading-relaxed">
+                        {selectedMood === null
+                          ? "Start here — log how you're feeling today by choosing one of the emojis below."
+                          : "Great! Next, select any context tags, add an optional reflection note, and click 'Log Reflection'."}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Mood Picker Option Component */}
                 <MoodPicker selectedMood={selectedMood} onSelectMood={setSelectedMood} />
+
+                {/* Context Tags Selector component */}
+                <TagSelector selectedTags={selectedTags} onChangeTags={setSelectedTags} />
 
                 {/* Optional Note Text Area Component */}
                 <NoteInput note={note} onChangeNote={setNote} />
@@ -323,6 +365,9 @@ export default function Home() {
 
             {/* Dashboard stats summary indicator */}
             <StatsSummary entries={entries} />
+
+            {/* Insights Card */}
+            <InsightsCard entries={entries} />
           </div>
 
           {/* Right Column: Trend & Archives */}
@@ -355,15 +400,25 @@ export default function Home() {
 
       {/* Calming bottom footer */}
       <footer className="mt-auto py-8 border-t border-slate-100 dark:border-slate-900 bg-white/30 dark:bg-slate-950/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-center sm:text-left">
-            <span className="text-[11px] font-medium text-slate-400 dark:text-slate-600">
-              MindPulse © 2026. Built with mindfulness.
-            </span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-4">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="text-center sm:text-left">
+              <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                MindPulse © 2026. Built with mindfulness.
+              </span>
+            </div>
+            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-550 dark:text-slate-450">
+              <span>Aligned with</span>
+              <span className="text-emerald-650 dark:text-emerald-400">UN SDG Goal 3: Good Health & Well-being</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-            <span>Aligned with</span>
-            <span className="text-emerald-500 dark:text-emerald-400">UN SDG Goal 3: Good Health & Well-being</span>
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-900 gap-3">
+            <Link
+              href="/crisis"
+              className="text-[11.5px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-450 dark:hover:text-rose-400 flex items-center gap-1 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-rose-500 rounded px-1.5 py-0.5 outline-none"
+            >
+              <span>Need to talk to someone? Crisis support resources →</span>
+            </Link>
           </div>
         </div>
       </footer>
