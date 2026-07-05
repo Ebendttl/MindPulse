@@ -14,6 +14,7 @@ export interface MoodEntry {
   timestamp: number; // exact log time
   moodValue: MoodValue;
   note?: string; // Optional short text note (max 200 chars)
+  tags?: string[]; // Optional context tags (Sleep, Work, etc.)
 }
 
 export interface MoodStats {
