@@ -11,8 +11,9 @@ import TrendChart from "@/components/TrendChart";
 import MoodHistory from "@/components/MoodHistory";
 import StatsSummary from "@/components/StatsSummary";
 import InsightsCard from "@/components/InsightsCard";
+import BreathingSpace from "@/components/BreathingSpace";
 import Link from "next/link";
-import { Heart, Activity, Sun, Moon, Info, RefreshCw, Calendar, CheckCircle2, Sparkles } from "lucide-react";
+import { Heart, Sun, Moon, Info, RefreshCw, Calendar, CheckCircle2, Sparkles } from "lucide-react";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -38,7 +39,6 @@ export default function Home() {
 
   // Mount effect to load entries and theme
   useEffect(() => {
-    setMounted(true);
     setEntries(getMoodEntries());
     setSelectedDate(getTodayDateString());
 
@@ -53,6 +53,13 @@ export default function Home() {
       setTheme("dark");
       document.documentElement.classList.toggle("dark", true);
     }
+
+    // Delay mounting slightly to allow user to experience the beautiful intro sequence
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Update form inputs when selectedDate or entries list changes
@@ -193,20 +200,91 @@ export default function Home() {
     }
   };
 
+  // Quick log helper for empty state nudges
+  const handleQuickLog = (dateStr: string) => {
+    setSelectedDate(dateStr);
+    showNotification(`Date set to ${dateStr}. Ready to log reflection!`, "info");
+    setTimeout(() => {
+      const formElement = document.getElementById("reflection-form");
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 150);
+  };
+
   // If component is not mounted, render a calming full-page loading placeholder
   if (!mounted) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-        <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center animate-scale-pulse"
-            style={{ backgroundColor: "var(--sdg-bg)" }}
-          >
-            <Heart className="w-8 h-8" style={{ color: "var(--sdg-text)" }} />
+      <div 
+        className="flex-1 flex flex-col items-center justify-center min-h-screen relative overflow-hidden" 
+        style={{ backgroundColor: "var(--background)" }}
+      >
+        {/* Glow ambient effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-tr from-[#6C63FF]/15 to-[#4ECDC4]/15 rounded-full blur-[80px] animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-gradient-to-br from-[#4ECDC4]/10 to-[#6C63FF]/10 rounded-full blur-[50px]" />
+
+        <div className="relative flex flex-col items-center z-10 text-center px-4">
+          {/* Glowing Ring Outer Loader */}
+          <div className="relative w-28 h-28 flex items-center justify-center mb-6">
+            {/* Pulsing outer ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#6C63FF]/30 animate-spin" style={{ animationDuration: "12s" }} />
+            {/* Pulse wave ring */}
+            <div className="absolute inset-2 rounded-full border border-teal-400/40 animate-ping" style={{ animationDuration: "3s" }} />
+            {/* Core logo background */}
+            <div 
+              className="w-20 h-20 rounded-full flex items-center justify-center border shadow-xl transition-all duration-300"
+              style={{
+                backgroundColor: "var(--card)",
+                borderColor: "var(--card-border)",
+                boxShadow: "0 10px 25px -5px rgba(108, 99, 255, 0.15), 0 8px 10px -6px rgba(108, 99, 255, 0.1)",
+              }}
+            >
+              {/* Logo image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="MindPulse Logo"
+                className="w-12 h-12 object-contain animate-pulse"
+              />
+            </div>
           </div>
-          <span className="text-lg font-bold" style={{ color: "var(--text-secondary)" }}>
-            Nurturing your mind...
-          </span>
+
+          {/* App Brand Name */}
+          <h1 
+            className="text-2xl font-black tracking-tight mb-2 uppercase"
+            style={{ color: "var(--text-primary)" }}
+          >
+            Mind<span style={{ color: "#6C63FF" }}>Pulse</span>
+          </h1>
+
+          {/* Calming text */}
+          <p className="text-xs font-black uppercase tracking-widest text-[#4ECDC4] mb-5 animate-pulse">
+            Nurturing your mind
+          </p>
+
+          {/* Subtle loading progress bar */}
+          <div 
+            className="w-48 h-[3px] rounded-full overflow-hidden border relative"
+            style={{
+              backgroundColor: "rgba(0,0,0,0.05)",
+              borderColor: "var(--card-border)"
+            }}
+          >
+            <div 
+              className="h-full rounded-full bg-gradient-to-r from-[#6C63FF] to-[#4ECDC4] animate-loading-bar"
+              style={{
+                width: "60%",
+                position: "absolute",
+                left: 0,
+                top: 0,
+              }}
+            />
+          </div>
+
+          {/* Subtitle / Tip */}
+          <p className="text-[11px] font-bold mt-5 max-w-[200px]" style={{ color: "var(--text-secondary)" }}>
+            Take a slow, deep breath to center yourself...
+          </p>
         </div>
       </div>
     );
@@ -249,27 +327,25 @@ export default function Home() {
           <div>
             <div className="flex items-center gap-2.5">
               <div
-                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
+                className="w-10 h-10 rounded-2xl overflow-hidden flex items-center justify-center text-white shadow-md border"
                 style={{
-                  background: "linear-gradient(135deg, #6C63FF, #4ECDC4)",
-                  boxShadow: "0 4px 12px rgba(108, 99, 255, 0.25)",
+                  borderColor: "var(--card-border)",
+                  boxShadow: "0 4px 12px rgba(108, 99, 255, 0.15)",
                 }}
               >
-                <Activity className="w-5 h-5 animate-pulse" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/logo.png"
+                  alt="MindPulse Logo"
+                  className="w-full h-full object-cover animate-pulse"
+                />
               </div>
               <h1
                 id="main-title"
                 className="text-2xl font-black tracking-tight"
                 style={{ color: "var(--text-primary)" }}
               >
-                Mind<span
-                  style={{
-                    background: "linear-gradient(135deg, #6C63FF, #4ECDC4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >Pulse</span>
+                Mind<span style={{ color: "#6C63FF" }}>Pulse</span>
               </h1>
             </div>
             {/* SDG badge — UNIFIED PILL STYLE (font-size 13px, padding 6px 14px, rounded-full) */}
@@ -341,21 +417,30 @@ export default function Home() {
         <StatsSummary entries={entries} />
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           
-          {/* Left Column: Logging & Stats */}
-          <div className="lg:col-span-6 space-y-6">
-            
-            {/* Logging reflection Card - Styled with Card Elevation Tokens */}
-            <section
-              className="rounded-[20px] p-6 flex flex-col gap-6 border"
-              style={{
-                backgroundColor: "var(--card)",
-                borderColor: "var(--card-border)",
-                boxShadow: "var(--card-shadow)",
-              }}
-            >
-              <form onSubmit={handleSave} className="space-y-6">
+          {/* Card 1: Record Reflection Form */}
+          <section
+            id="reflection-form"
+            className="rounded-[20px] p-6 flex flex-col justify-between border h-full transition-all duration-300"
+            style={{
+              backgroundColor: "var(--card)",
+              borderColor: "var(--card-border)",
+              boxShadow: "var(--card-shadow)",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.borderColor = "var(--card-border-hover)";
+              el.style.boxShadow = "var(--card-shadow-hover)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.borderColor = "var(--card-border)";
+              el.style.boxShadow = "var(--card-shadow)";
+            }}
+          >
+            <form onSubmit={handleSave} className="flex flex-col h-full flex-grow justify-between">
+              <div className="space-y-6 flex-grow flex flex-col justify-start">
                 
                 {/* Heading and Date picker */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -438,65 +523,67 @@ export default function Home() {
                 {/* Optional Note Text Area Component */}
                 <NoteInput note={note} onChangeNote={setNote} />
 
-                {/* Submit Action Button */}
-                <div className="flex justify-between items-center pt-2">
-                  <div className="text-[10px] max-w-[200px] sm:max-w-xs leading-normal" style={{ color: "var(--text-secondary)" }}>
-                    {!isTodayLogged && selectedDateIsToday && (
-                      <span className="flex items-center gap-1 font-semibold">
-                        <Info className="w-3 h-3 shrink-0" style={{ color: "#4ECDC4" }} />
-                        {"Whenever you're ready, take a gentle pause here."}
-                      </span>
-                    )}
-                  </div>
+              </div>
 
-                  <button
-                    id="save-log-btn"
-                    type="submit"
-                    className="flex items-center gap-1.5 px-6 py-3 rounded-2xl text-white font-bold text-sm active:scale-[0.98] transition-all duration-300"
-                    style={{
-                      background: "linear-gradient(135deg, #6C63FF, #5A52E0)",
-                      boxShadow: "0 4px 16px rgba(108, 99, 255, 0.25)",
-                    }}
-                  >
-                    <span>{currentSelectedEntry ? "Update Entry" : "Log Reflection"}</span>
-                  </button>
+              {/* Submit Action Button */}
+              <div className="flex justify-between items-center pt-6 mt-auto">
+                <div className="text-[10px] max-w-[200px] sm:max-w-xs leading-normal" style={{ color: "var(--text-secondary)" }}>
+                  {!isTodayLogged && selectedDateIsToday && (
+                    <span className="flex items-center gap-1 font-semibold">
+                      <Info className="w-3 h-3 shrink-0" style={{ color: "#4ECDC4" }} />
+                      {"Whenever you're ready, take a gentle pause here."}
+                    </span>
+                  )}
                 </div>
-              </form>
-            </section>
 
-            {/* Insights Card */}
-            <InsightsCard entries={entries} />
-          </div>
-
-          {/* Right Column: Trend & Archives */}
-          <div className="lg:col-span-6 space-y-6">
-            
-            {/* Trend Chart Component */}
-            <TrendChart entries={entries} />
-
-            {/* Mood History list component */}
-            <MoodHistory entries={entries} onDeleteEntry={handleDelete} />
-
-            {/* Clear All Data utility button */}
-            {entries.length > 0 && (
-              <div className="flex justify-end pt-2">
                 <button
-                  id="clear-all-btn"
-                  type="button"
-                  onClick={handleClearAllData}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all duration-300"
-                  style={{ color: "var(--text-secondary)" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#E8837A"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; }}
+                  id="save-log-btn"
+                  type="submit"
+                  className="flex items-center gap-1.5 px-6 py-3 rounded-2xl text-white font-bold text-sm active:scale-[0.98] transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, #6C63FF, #5A52E0)",
+                    boxShadow: "0 4px 16px rgba(108, 99, 255, 0.25)",
+                  }}
                 >
-                  <RefreshCw className="w-3 h-3" />
-                  <span>Reset All Local Storage Data</span>
+                  <span>{currentSelectedEntry ? "Update Entry" : "Log Reflection"}</span>
                 </button>
               </div>
-            )}
+            </form>
+          </section>
+
+          {/* Card 2: Trend Chart Component */}
+          <TrendChart entries={entries} />
+
+          {/* Card 3: Insights Card */}
+          <InsightsCard entries={entries} />
+
+          {/* Card 4: Mood History list component */}
+          <MoodHistory entries={entries} onDeleteEntry={handleDelete} onQuickLog={handleQuickLog} />
+
+          {/* Card 5: Interactive Breathing & Mindfulness Space (Spans both columns on desktop) */}
+          <div className="lg:col-span-2">
+            <BreathingSpace />
           </div>
           
         </div>
+
+        {/* Reset All Data utility button */}
+        {entries.length > 0 && (
+          <div className="flex justify-end mt-6">
+            <button
+              id="clear-all-btn"
+              type="button"
+              onClick={handleClearAllData}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold transition-all duration-300"
+              style={{ color: "var(--text-secondary)" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#E8837A"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; }}
+            >
+              <RefreshCw className="w-3 h-3" />
+              <span>Reset All Local Storage Data</span>
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Rebuilt Structured Footer Bar */}

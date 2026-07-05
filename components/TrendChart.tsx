@@ -208,7 +208,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
 
   return (
     <div
-      className="rounded-[20px] p-6 transition-all duration-300 w-full border"
+      className="rounded-[20px] p-6 transition-all duration-300 w-full border h-full flex flex-col justify-between"
       style={{
         backgroundColor: "var(--card)",
         borderColor: "var(--card-border)",
@@ -277,7 +277,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
         </div>
       </div>
 
-      <div className="h-64 sm:h-72 w-full relative">
+      <div className="h-64 sm:h-72 w-full relative flex-grow flex flex-col justify-center min-h-[260px]">
         {hasData ? (
           <div key={`${chartType}-${timeRange}`} className="w-full h-full" style={{ animation: "fadeIn 0.5s ease-out forwards" }}>
             {chartType === "line" ? (
