@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #FAF7F2;
+  --foreground: #2A2630;
+}
+
+.dark {
+  --background: #1A1825;
+  --foreground: #FAF7F2;
+}
+
 @layer base {
   body {
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 
