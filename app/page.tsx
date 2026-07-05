@@ -199,12 +199,12 @@ export default function Home() {
       <div className="flex-1 flex flex-col items-center justify-center" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
         <div className="flex flex-col items-center gap-4 animate-pulse">
           <div
-            className="w-16 h-16 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "#6C63FF1A" }}
+            className="w-16 h-16 rounded-full flex items-center justify-center animate-scale-pulse"
+            style={{ backgroundColor: "var(--sdg-bg)" }}
           >
-            <Heart className="w-8 h-8" style={{ color: "#6C63FF" }} />
+            <Heart className="w-8 h-8" style={{ color: "var(--sdg-text)" }} />
           </div>
-          <span className="text-lg font-semibold" style={{ color: "var(--text-secondary)" }}>
+          <span className="text-lg font-bold" style={{ color: "var(--text-secondary)" }}>
             Nurturing your mind...
           </span>
         </div>
@@ -225,7 +225,7 @@ export default function Home() {
           className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-5 py-3 rounded-2xl shadow-xl transition-all duration-300 border animate-slide-in"
           style={{
             backgroundColor: "var(--card)",
-            borderColor: notification.type === "success" ? "#8FC97E66" : "#6C63FF40",
+            borderColor: notification.type === "success" ? "rgba(143, 201, 126, 0.4)" : "rgba(108, 99, 255, 0.25)",
             color: "var(--text-primary)",
           }}
         >
@@ -233,20 +233,19 @@ export default function Home() {
             className="w-5 h-5"
             style={{ color: notification.type === "success" ? "#8FC97E" : "#6C63FF" }}
           />
-          <span className="text-xs font-semibold tracking-wide">{notification.message}</span>
+          <span className="text-xs font-bold tracking-wide">{notification.message}</span>
         </div>
       )}
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        
-        {/* ═══════════════════════════════════ */}
-        {/* HEADER — Spec Section 7            */}
-        {/* ═══════════════════════════════════ */}
-        <header
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6"
-          style={{ borderBottom: "1px solid var(--card-border)" }}
-        >
+      {/* Sticky Header Nav */}
+      <header
+        className="sticky top-0 z-40 w-full py-5 backdrop-blur-md transition-all duration-300"
+        style={{
+          borderBottom: "1px solid var(--card-border)",
+          backgroundColor: "var(--header-bg)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <div className="flex items-center gap-2.5">
               <div
@@ -273,16 +272,17 @@ export default function Home() {
                 >Pulse</span>
               </h1>
             </div>
-            {/* SDG badge — pill shape */}
-            <div className="mt-1.5 flex items-center gap-1.5">
+            {/* SDG badge — UNIFIED PILL STYLE (font-size 13px, padding 6px 14px, rounded-full) */}
+            <div className="mt-2.5">
               <span
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold"
+                className="inline-flex items-center gap-1.5 py-[6px] px-[14px] rounded-full text-[13px] font-black uppercase tracking-tight border"
                 style={{
-                  backgroundColor: "#6C63FF1A", // primary at 10% opacity
-                  color: "#6C63FF",
+                  backgroundColor: "var(--sdg-bg)",
+                  borderColor: "var(--sdg-border)",
+                  color: "var(--sdg-text)",
                 }}
               >
-                <Sparkles className="w-3 h-3" />
+                <Sparkles className="w-3.5 h-3.5" />
                 UN SDG 3: Good Health & Well-being
               </span>
             </div>
@@ -332,8 +332,11 @@ export default function Home() {
               <span>Demo Logs</span>
             </button>
           </div>
-        </header>
+        </div>
+      </header>
 
+      {/* Main Container */}
+      <main className="flex-grow max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Dashboard stats summary indicator (spans full width above grid columns) */}
         <StatsSummary entries={entries} />
 
@@ -343,9 +346,14 @@ export default function Home() {
           {/* Left Column: Logging & Stats */}
           <div className="lg:col-span-6 space-y-6">
             
-            {/* Logging reflection Card */}
+            {/* Logging reflection Card - Styled with Card Elevation Tokens */}
             <section
-              className="bg-card border border-card-border rounded-[20px] p-6"
+              className="rounded-[20px] p-6 flex flex-col gap-6 border"
+              style={{
+                backgroundColor: "var(--card)",
+                borderColor: "var(--card-border)",
+                boxShadow: "var(--card-shadow)",
+              }}
             >
               <form onSubmit={handleSave} className="space-y-6">
                 
@@ -355,11 +363,11 @@ export default function Home() {
                     <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
                       {currentSelectedEntry ? "Edit Reflection" : "Record Reflection"}
                     </h2>
-                    <p className="text-xs mt-0.5 font-medium" style={{ color: "var(--text-secondary)" }}>
+                    <p className="text-xs mt-0.5 font-semibold" style={{ color: "var(--text-secondary)" }}>
                       Save a moment to map your mental landscape
                     </p>
                   </div>
- 
+
                   {/* Date Input */}
                   <div
                     className="flex items-center gap-2 px-3 py-1.5 rounded-xl border w-full sm:w-auto"
@@ -384,27 +392,27 @@ export default function Home() {
                 {/* Onboarding Help Box */}
                 {entries.length === 0 && (
                   <div
-                    className="rounded-2xl p-4 flex items-start gap-3 shadow-sm border"
+                    className="rounded-[20px] p-6 flex items-start gap-4 border"
                     style={{
-                      backgroundColor: "#6C63FF0D", // primary at 5%
-                      borderColor: "#6C63FF26",     // primary at 15%
+                      backgroundColor: "var(--sdg-bg)",
+                      borderColor: "var(--sdg-border)",
                     }}
                   >
                     <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-bold text-sm"
+                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm border"
                       style={{
-                        backgroundColor: "#6C63FF1A",
-                        color: "#6C63FF",
+                        backgroundColor: "var(--background)",
+                        color: "var(--sdg-text)",
+                        borderColor: "var(--sdg-border)",
                       }}
                     >
                       {selectedMood === null ? "1" : "2"}
                     </div>
                     <div>
                       <h4
-                        className="text-xs font-black uppercase"
+                        className="text-xs font-black uppercase tracking-wider"
                         style={{
-                          letterSpacing: "0.05em",
-                          color: "#6C63FF",
+                          color: "var(--sdg-text)",
                         }}
                       >
                         {selectedMood === null ? "Welcome to MindPulse" : "Almost there"}
@@ -434,7 +442,7 @@ export default function Home() {
                 <div className="flex justify-between items-center pt-2">
                   <div className="text-[10px] max-w-[200px] sm:max-w-xs leading-normal" style={{ color: "var(--text-secondary)" }}>
                     {!isTodayLogged && selectedDateIsToday && (
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 font-semibold">
                         <Info className="w-3 h-3 shrink-0" style={{ color: "#4ECDC4" }} />
                         {"Whenever you're ready, take a gentle pause here."}
                       </span>
@@ -491,37 +499,51 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Calming bottom footer */}
+      {/* Rebuilt Structured Footer Bar */}
       <footer
-        className="mt-auto py-8"
+        className="w-full py-8"
         style={{
           borderTop: "1px solid var(--card-border)",
-          backgroundColor: "var(--card)",
+          backgroundColor: "transparent",
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-4">
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-center sm:text-left">
-              <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>
-                MindPulse © 2026. Built with mindfulness.
-              </span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-6 text-center md:text-left">
+            {/* Left Column */}
+            <div className="text-[13px] font-bold" style={{ color: "var(--text-secondary)" }}>
+              MindPulse © 2026 · Built with mindfulness
             </div>
-            <div className="flex items-center gap-1 text-[11px] font-bold">
-              <span style={{ color: "var(--text-secondary)" }}>Aligned with</span>
-              <span style={{ color: "#6C63FF" }}>UN SDG Goal 3: Good Health & Well-being</span>
+
+            {/* Center Column - Calm Pill/Badge */}
+            <div className="flex justify-center">
+              <Link
+                href="/crisis"
+                className="inline-flex items-center gap-2 py-[6px] px-[14px] rounded-full text-[13px] font-black uppercase tracking-tight border transition-all duration-300 hover:scale-[1.02]"
+                style={{
+                  backgroundColor: "var(--crisis-bg)",
+                  color: "var(--crisis-text)",
+                  borderColor: "var(--crisis-border)",
+                }}
+              >
+                <Heart className="w-3.5 h-3.5 fill-current" />
+                <span>Crisis support resources</span>
+              </Link>
             </div>
-          </div>
-          <div
-            className="w-full flex flex-col sm:flex-row justify-between items-center pt-4 gap-3"
-            style={{ borderTop: "1px solid var(--card-border)" }}
-          >
-            <Link
-              href="/crisis"
-              className="text-[11.5px] font-bold flex items-center gap-1 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-rose-500 rounded px-1.5 py-0.5 outline-none"
-              style={{ color: "#E8837A" }}
-            >
-              <span>Need to talk to someone? Crisis support resources →</span>
-            </Link>
+
+            {/* Right Column - SDG Badge Pill */}
+            <div className="flex justify-center md:justify-end">
+              <div
+                className="inline-flex items-center gap-1.5 py-[6px] px-[14px] rounded-full text-[13px] font-black uppercase tracking-tight border"
+                style={{
+                  backgroundColor: "var(--sdg-bg)",
+                  borderColor: "var(--sdg-border)",
+                  color: "var(--sdg-text)",
+                }}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>UN SDG Goal 3: Good Health</span>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

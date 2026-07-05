@@ -87,9 +87,13 @@ export const MOODS: Record<MoodValue, MoodType> = {
     hex: MOOD_COLORS[6].base,
   },
 };
+// ORDER MUST BE ASCENDING 1-6: Struggling, Low, Okay, Good, Peaceful, Great — DO NOT REORDER
+export const MOOD_LIST: MoodType[] = [
+  MOODS[1],
+  MOODS[2],
+  MOODS[3],
+  MOODS[4],
+  MOODS[5],
+  MOODS[6],
+];
 
-/**
- * MOOD_LIST sorted ASCENDING by value (1 → 6).
- * This is the canonical render order: Struggling → Low → Okay → Good → Peaceful → Great
- */
-export const MOOD_LIST = Object.values(MOODS).sort((a, b) => a.value - b.value);

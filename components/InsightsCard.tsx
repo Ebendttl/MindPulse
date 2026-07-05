@@ -17,7 +17,24 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
   }, [entries]);
 
   return (
-    <div className="w-full bg-card border border-card-border rounded-[20px] p-6 transition-shadow duration-300 hover:shadow-md">
+    <div
+      className="rounded-[20px] p-6 transition-all duration-300 w-full border"
+      style={{
+        backgroundColor: "var(--card)",
+        borderColor: "var(--card-border)",
+        boxShadow: "var(--card-shadow)",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.borderColor = "var(--card-border-hover)";
+        el.style.boxShadow = "var(--card-shadow-hover)";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.borderColor = "var(--card-border)";
+        el.style.boxShadow = "var(--card-shadow)";
+      }}
+    >
       <div className="flex items-center gap-2 mb-4">
         <BrainCircuit className="w-5 h-5" style={{ color: BRAND.primaryEnd }} />
         <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>MindPulse Insights</h2>
@@ -25,32 +42,32 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
 
       {correlationInsight ? (
         <div
-          className="rounded-2xl p-4 flex gap-3.5 items-start border"
+          className="rounded-[20px] p-6 flex gap-4 items-start border"
           style={{
             backgroundColor: `${BRAND.primaryEnd}0D`, // 5% opacity
             borderColor: `${BRAND.primaryEnd}26`, // 15% opacity
           }}
         >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border"
             style={{
               backgroundColor: `${BRAND.primaryEnd}1A`, // 10% opacity
               color: BRAND.primaryEnd,
+              borderColor: `${BRAND.primaryEnd}33`,
             }}
           >
-            <Info className="w-4 h-4" />
+            <Info className="w-5 h-5" />
           </div>
           <div>
             <h3
-              className="text-xs font-bold uppercase mb-1"
+              className="text-xs font-black uppercase mb-1 tracking-wider"
               style={{
-                letterSpacing: "0.05em",
                 color: BRAND.primaryEnd,
               }}
             >
               Active Correlation
             </h3>
-            <p className="text-sm leading-relaxed font-semibold" style={{ color: "var(--text-primary)" }}>
+            <p className="text-sm leading-relaxed font-bold" style={{ color: "var(--text-primary)" }}>
               {correlationInsight}
             </p>
           </div>
@@ -58,7 +75,7 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
       ) : (
         <div className="flex flex-col items-center justify-center text-center">
           <BreathingCircleIllustration />
-          <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
+          <p className="text-sm font-bold mb-1" style={{ color: "var(--text-primary)" }}>
             Not enough data yet
           </p>
           <p className="text-xs max-w-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>

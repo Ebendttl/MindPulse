@@ -54,35 +54,50 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
   }, [entries, stats.average]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-8">
       {/* Average Mood Card */}
       <div
-        className="bg-card border border-card-border rounded-[20px] p-6 flex items-center gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative"
+        className="rounded-[20px] p-6 flex items-center gap-4 transition-all duration-300 relative border overflow-hidden"
         style={{
+          backgroundColor: "var(--card)",
+          borderColor: "var(--card-border)",
+          boxShadow: "var(--card-shadow)",
           borderLeftWidth: "4px",
           borderLeftColor: avgAccentColor,
         }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border-hover)";
+          el.style.boxShadow = "var(--card-shadow-hover)";
+          el.style.transform = "translateY(-2px)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border)";
+          el.style.boxShadow = "var(--card-shadow)";
+          el.style.transform = "none";
+        }}
       >
         <div
-          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 border"
           style={{
-            backgroundColor: `${avgAccentColor}26`, // 15% opacity
+            backgroundColor: `${avgAccentColor}1A`, // 10% opacity
+            borderColor: `${avgAccentColor}33`,
           }}
         >
           <Smile className="w-6 h-6" style={{ color: avgAccentColor }} />
         </div>
         <div>
           <span
-            className="text-xs font-bold uppercase block"
+            className="text-xs font-bold uppercase block tracking-wider"
             style={{
-              letterSpacing: "0.05em",
               color: "var(--text-secondary)",
               fontSize: "12px",
             }}
           >
             Average Mood
           </span>
-          <div className="flex items-baseline gap-2 mt-0.5">
+          <div className="flex items-baseline gap-2 mt-1">
             <span
               className="font-black"
               style={{
@@ -95,7 +110,7 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
             </span>
             {averageMoodDetails && (
               <span
-                className="text-xs font-semibold"
+                className="text-xs font-bold"
                 style={{ color: "var(--text-secondary)" }}
               >
                 ({averageMoodDetails.emoji} {averageMoodDetails.label})
@@ -107,32 +122,47 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
 
       {/* Streak Card */}
       <div
-        className="bg-card border border-card-border rounded-[20px] p-6 flex items-center gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative"
+        className="rounded-[20px] p-6 flex items-center gap-4 transition-all duration-300 relative border overflow-hidden"
         style={{
+          backgroundColor: "var(--card)",
+          borderColor: "var(--card-border)",
+          boxShadow: "var(--card-shadow)",
           borderLeftWidth: "4px",
           borderLeftColor: BRAND.primary,
         }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border-hover)";
+          el.style.boxShadow = "var(--card-shadow-hover)";
+          el.style.transform = "translateY(-2px)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border)";
+          el.style.boxShadow = "var(--card-shadow)";
+          el.style.transform = "none";
+        }}
       >
         <div
-          className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${streak > 0 ? "animate-[bounce_2.5s_ease-in-out_infinite]" : ""}`}
+          className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border ${streak > 0 ? "animate-scale-pulse" : ""}`}
           style={{
-            backgroundColor: `${BRAND.primary}26`, // 15% opacity
+            backgroundColor: `${BRAND.primary}1A`, // 10% opacity
+            borderColor: `${BRAND.primary}33`,
           }}
         >
           <Award className="w-6 h-6" style={{ color: BRAND.primary }} />
         </div>
         <div>
           <span
-            className="text-xs font-bold uppercase block"
+            className="text-xs font-bold uppercase block tracking-wider"
             style={{
-              letterSpacing: "0.05em",
               color: "var(--text-secondary)",
               fontSize: "12px",
             }}
           >
             Logging Streak
           </span>
-          <div className="flex items-baseline gap-2 mt-0.5">
+          <div className="flex items-baseline gap-2 mt-1">
             <span
               className="font-black"
               style={{
@@ -144,7 +174,7 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
               {streak} {streak === 1 ? "day" : "days"}
             </span>
             <span
-              className="text-xs font-semibold"
+              className="text-xs font-bold"
               style={{ color: "var(--text-secondary)" }}
             >
               consecutive
@@ -155,26 +185,41 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
 
       {/* SDG 3 / Wellness Tip Card */}
       <div
-        className="bg-card border border-card-border rounded-[20px] p-6 flex items-start gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative md:col-span-1"
+        className="rounded-[20px] p-6 flex items-start gap-4 transition-all duration-300 relative border overflow-hidden"
         style={{
+          backgroundColor: "var(--card)",
+          borderColor: "var(--card-border)",
+          boxShadow: "var(--card-shadow)",
           borderLeftWidth: "4px",
           borderLeftColor: "#E8837A",
         }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border-hover)";
+          el.style.boxShadow = "var(--card-shadow-hover)";
+          el.style.transform = "translateY(-2px)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.borderColor = "var(--card-border)";
+          el.style.boxShadow = "var(--card-shadow)";
+          el.style.transform = "none";
+        }}
       >
         <div
-          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 border mt-0.5"
           style={{
-            backgroundColor: "rgba(232, 131, 122, 0.15)",
+            backgroundColor: "rgba(232, 131, 122, 0.12)",
+            borderColor: "rgba(232, 131, 122, 0.25)",
           }}
         >
           <Heart className="w-6 h-6" style={{ color: "#E8837A" }} />
         </div>
         <div className="flex-1">
-          <div className="flex items-center gap-1.5 mb-1">
+          <div className="flex items-center gap-1.5 mb-1.5">
             <span
-              className="text-xs font-bold uppercase"
+              className="text-xs font-bold uppercase tracking-wider"
               style={{
-                letterSpacing: "0.05em",
                 color: "var(--text-secondary)",
                 fontSize: "12px",
               }}
@@ -183,7 +228,7 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
             </span>
           </div>
           <p
-            className="text-xs leading-relaxed font-semibold"
+            className="text-xs leading-relaxed font-bold"
             style={{ color: "var(--text-primary)" }}
           >
             {wellBeingTip}

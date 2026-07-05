@@ -104,15 +104,29 @@ export default function TagSelector({ selectedTags, onChangeTags }: TagSelectorP
               onKeyDown={handleKeyDown}
               aria-label={`Toggle tag: ${tag.name}`}
               aria-pressed={isSelected}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold cursor-pointer transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="flex items-center gap-1.5 py-[6px] px-[14px] rounded-full border text-[13px] font-black uppercase tracking-tight cursor-pointer transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{
                 backgroundColor: isSelected ? tag.activeBg : "var(--card)",
                 borderColor: isSelected ? `${tag.activeColor}66` : "var(--card-border)",
                 color: isSelected ? tag.activeText : "var(--text-secondary)",
                 transform: isSelected ? "scale(1.03)" : undefined,
-                boxShadow: isSelected ? `0 1px 4px ${tag.activeColor}26` : undefined,
+                boxShadow: isSelected ? `0 2px 6px ${tag.activeColor}33` : "var(--card-shadow)",
                 // @ts-expect-error CSS custom properties
                 "--tw-ring-color": "#6C63FF",
+              }}
+              onMouseEnter={(e) => {
+                if (!isSelected) {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "var(--card-border-hover)";
+                  el.style.boxShadow = "var(--card-shadow-hover)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = "var(--card-border)";
+                  el.style.boxShadow = "var(--card-shadow)";
+                }
               }}
             >
               <span className="text-[14px]" role="img" aria-hidden="true">

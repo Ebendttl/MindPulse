@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { MoodValue } from "@/types";
 import { MOOD_LIST } from "@/lib/moodData";
 import { MOOD_COLORS, MOOD_COLORS_DARK } from "@/lib/moodColors";
@@ -12,7 +12,6 @@ interface MoodPickerProps {
 
 /**
  * Helper: detect if dark mode is active by checking the <html> element.
- * Called on render — lightweight since it's a single classList check.
  */
 function isDarkMode(): boolean {
   if (typeof document === "undefined") return false;
@@ -22,6 +21,13 @@ function isDarkMode(): boolean {
 export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerProps) {
   const dark = isDarkMode();
 
+  // Print/log the array order to console on load in dev mode for verification
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("MindPulse Mood Array Order Verification:", MOOD_LIST.map((m) => `${m.value}: ${m.label}`));
+    }
+  }, []);
+
   return (
     <div className="w-full">
       <h3
@@ -30,26 +36,31 @@ export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerPro
       >
         How is your mind feeling today?
       </h3>
-      {/* MOOD_LIST is sorted ascending: 1 Struggling → 6 Great */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+      {/* Grid adapts layout to fit 24px padding on all screen sizes */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
         {MOOD_LIST.map((mood) => {
           const isSelected = selectedMood === mood.value;
           const colors = MOOD_COLORS[mood.value];
           const darkColors = MOOD_COLORS_DARK[mood.value];
 
-          // Compute colors based on dark mode and selection state
+          // CARD ELEVATION SYSTEM:
+          // Unselected: uses the card surface token, card border, card shadow
+          // Selected: uses the mood base color, border is transparent, shadow is elevated
           const bgColor = isSelected
             ? colors.base
-            : dark ? darkColors.tint : colors.tint;
+            : "var(--card)";
           const borderColor = isSelected
             ? "transparent"
-            : dark ? darkColors.border : `${colors.base}4D`; // 30% opacity
+            : "var(--card-border)";
+          const shadowStyle = isSelected
+            ? `0 6px 16px ${colors.base}4D` // Glowing shadow when selected
+            : "var(--card-shadow)";
           const textColor = isSelected
-            ? "#FFFDF8"
-            : dark ? darkColors.text : colors.text;
+            ? "#FFFFFF"
+            : "var(--text-primary)";
           const descColor = isSelected
-            ? "rgba(255,255,255,0.85)"
-            : dark ? `${darkColors.text}BF` : `${colors.text}BF`; // 75% opacity
+            ? "rgba(255, 255, 255, 0.85)"
+            : "var(--text-secondary)";
 
           const handleKeyDown = (e: React.KeyboardEvent) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -66,37 +77,35 @@ export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerPro
               onKeyDown={handleKeyDown}
               aria-label={`Select mood: ${mood.label}`}
               aria-pressed={isSelected}
-              className="flex flex-col items-center justify-center p-4 rounded-[20px] transition-all duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="flex flex-col items-center justify-center p-6 rounded-[20px] border transition-all duration-300 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{
                 backgroundColor: bgColor,
-                border: `1px solid ${borderColor}`,
+                borderColor: borderColor,
+                boxShadow: shadowStyle,
                 color: textColor,
-                boxShadow: isSelected
-                  ? `0 0 0 3px ${colors.base}66, 0 8px 20px ${colors.base}26`
-                  : "none",
-                transform: isSelected ? "translateY(-2px)" : undefined,
+                transform: isSelected ? "translateY(-4px)" : undefined,
                 // @ts-expect-error CSS custom properties for focus ring
                 "--tw-ring-color": "#6C63FF",
               }}
               onMouseEnter={(e) => {
                 if (!isSelected) {
                   const el = e.currentTarget as HTMLElement;
-                  el.style.borderColor = dark ? `${colors.base}66` : `${colors.base}99`;
+                  el.style.borderColor = "var(--card-border-hover)";
+                  el.style.boxShadow = "var(--card-shadow-hover)";
                   el.style.transform = "translateY(-2px)";
-                  el.style.boxShadow = `0 8px 20px ${colors.base}26`;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!isSelected) {
                   const el = e.currentTarget as HTMLElement;
                   el.style.borderColor = borderColor;
+                  el.style.boxShadow = shadowStyle;
                   el.style.transform = "none";
-                  el.style.boxShadow = "none";
                 }
               }}
             >
               <span
-                className="text-3xl sm:text-4xl mb-2 select-none transition-transform duration-200"
+                className="text-3xl sm:text-4xl mb-2.5 select-none transition-transform duration-300"
                 style={{
                   transform: isSelected ? "scale(1.15)" : "scale(1)",
                 }}
@@ -105,11 +114,11 @@ export default function MoodPicker({ selectedMood, onSelectMood }: MoodPickerPro
               >
                 {mood.emoji}
               </span>
-              <span className="text-xs font-bold tracking-tight">
+              <span className="text-xs font-black tracking-tight uppercase">
                 {mood.label}
               </span>
               <span
-                className="text-[10px] mt-1 hidden sm:block text-center font-medium leading-tight"
+                className="text-[10px] mt-1.5 font-bold leading-tight text-center"
                 style={{ color: descColor }}
               >
                 {mood.description}

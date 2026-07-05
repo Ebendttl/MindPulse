@@ -36,7 +36,24 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
   };
 
   return (
-    <div className="w-full bg-card border border-card-border rounded-[20px] p-6 transition-shadow duration-300 hover:shadow-md">
+    <div
+      className="rounded-[20px] p-6 transition-all duration-300 w-full border"
+      style={{
+        backgroundColor: "var(--card)",
+        borderColor: "var(--card-border)",
+        boxShadow: "var(--card-shadow)",
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.borderColor = "var(--card-border-hover)";
+        el.style.boxShadow = "var(--card-shadow-hover)";
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.borderColor = "var(--card-border)";
+        el.style.boxShadow = "var(--card-shadow)";
+      }}
+    >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -56,8 +73,9 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
               placeholder="Search notes, moods or tags..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border bg-background outline-none transition-all duration-200 focus:ring-2 focus:ring-offset-1"
+              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border outline-none transition-all duration-200 focus:ring-2 focus:ring-offset-1"
               style={{
+                backgroundColor: "var(--background)",
                 borderColor: "var(--card-border)",
                 color: "var(--text-primary)",
                 // @ts-expect-error CSS custom properties
@@ -70,14 +88,14 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
 
       {entries.length === 0 ? (
         <div
-          className="text-center rounded-2xl border border-dashed"
+          className="text-center rounded-[20px] border border-dashed py-8"
           style={{
             backgroundColor: "var(--background)",
             borderColor: "var(--card-border)",
           }}
         >
           <BreathingCircleIllustration />
-          <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
+          <p className="text-sm font-bold mb-1" style={{ color: "var(--text-primary)" }}>
             No entries logged yet
           </p>
           <p className="text-xs max-w-xs mx-auto leading-relaxed pb-6" style={{ color: "var(--text-secondary)" }}>
@@ -85,11 +103,11 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
           </p>
         </div>
       ) : filteredEntries.length === 0 ? (
-        <div className="text-center py-12 text-sm" style={{ color: "var(--text-secondary)" }}>
+        <div className="text-center py-12 text-sm font-bold" style={{ color: "var(--text-secondary)" }}>
           No entries matched &quot;{searchTerm}&quot;
         </div>
       ) : (
-        <div className="space-y-3 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+        <div className="space-y-4 max-h-[520px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-rounded">
           {filteredEntries.map((entry) => {
             const mood = MOODS[entry.moodValue];
             const colors = MOOD_COLORS[entry.moodValue];
@@ -97,18 +115,21 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
             return (
               <div
                 key={entry.id}
-                className="flex items-start justify-between gap-4 p-4 rounded-2xl border transition-all duration-200 hover:shadow-sm dark:hover:shadow-sm"
+                className="flex items-start justify-between gap-4 p-6 rounded-[20px] border transition-all duration-200 hover:shadow-md"
                 style={{
-                  backgroundColor: colors.tint,
-                  borderColor: `${colors.base}33`, // 20% opacity
+                  backgroundColor: "var(--card)",
+                  borderColor: "var(--card-border)",
+                  boxShadow: "var(--card-shadow)",
+                  borderLeftWidth: "4px",
+                  borderLeftColor: colors.base,
                 }}
               >
                 <div className="flex items-start gap-4">
-                  {/* Mood Icon/Emoji */}
+                  {/* Mood Icon/Emoji - UNIFIED UNIFORM ROUNDED-FULL CONTAINER */}
                   <div
-                    className="flex items-center justify-center w-12 h-12 rounded-xl text-2xl shrink-0 border"
+                    className="flex items-center justify-center w-12 h-12 rounded-full text-2xl shrink-0 border"
                     style={{
-                      backgroundColor: "var(--card)",
+                      backgroundColor: "var(--background)",
                       borderColor: `${colors.base}33`,
                     }}
                   >
@@ -121,26 +142,26 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                       <span
-                        className="text-sm font-bold"
+                        className="text-sm font-black uppercase tracking-tight"
                         style={{ color: colors.text }}
                       >
                         {mood?.label || "Unknown"}
                       </span>
                       <span style={{ color: "var(--card-border)" }} className="hidden sm:inline">•</span>
-                      <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
+                      <span className="text-xs font-bold" style={{ color: "var(--text-secondary)" }}>
                         {formatDate(entry.date)}
                       </span>
                     </div>
 
-                    {/* Context Tags */}
+                    {/* Context Tags - UNIFIED STYLE (font-size 13px, padding 6px 14px, rounded-full) */}
                     {entry.tags && entry.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      <div className="flex flex-wrap gap-2 mt-2">
                         {entry.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 rounded-full text-[10px] font-bold border"
+                            className="py-[6px] px-[14px] rounded-full text-[13px] font-black uppercase tracking-tight border inline-flex items-center"
                             style={{
-                              backgroundColor: "var(--card)",
+                              backgroundColor: "var(--background)",
                               color: "var(--text-secondary)",
                               borderColor: "var(--card-border)",
                             }}
@@ -153,18 +174,17 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
 
                     {entry.note ? (
                       <p
-                        className="mt-2 text-sm px-3 py-2 rounded-xl inline-block max-w-full break-words font-normal border"
+                        className="mt-3 text-sm px-4 py-3 rounded-[20px] inline-block max-w-full break-words font-semibold border"
                         style={{
-                          backgroundColor: "var(--card)",
+                          backgroundColor: "var(--background)",
                           color: "var(--text-primary)",
                           borderColor: "var(--card-border)",
-                          opacity: 0.9,
                         }}
                       >
                         {entry.note}
                       </p>
                     ) : (
-                      <p className="mt-2.5 text-xs italic font-medium" style={{ color: "var(--text-secondary)", opacity: 0.7 }}>
+                      <p className="mt-2.5 text-xs italic font-bold" style={{ color: "var(--text-secondary)", opacity: 0.7 }}>
                         No reflection note attached
                       </p>
                     )}
@@ -176,7 +196,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   type="button"
                   onClick={() => onDeleteEntry(entry.id)}
                   aria-label={`Delete entry for ${formatDate(entry.date)}`}
-                  className="p-2 hover:bg-rose-50 rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-rose-500 dark:hover:bg-rose-950/30"
+                  className="p-2 rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                   style={{ color: "var(--text-secondary)" }}
                   title="Delete entry"
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#E8837A"; }}
