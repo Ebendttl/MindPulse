@@ -1,4 +1,4 @@
-import { MoodEntry, MoodValue } from "@/types";
+import { MoodEntry } from "@/types";
 
 /**
  * Computes a plain-language correlation between mood values and context tags.

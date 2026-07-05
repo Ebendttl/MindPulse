@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useMemo } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import {
@@ -17,7 +15,8 @@ import {
 } from "chart.js";
 import { MoodEntry, MoodValue } from "@/types";
 import { MOODS } from "@/lib/moodData";
-import { Calendar, BarChart2, TrendingUp } from "lucide-react";
+import { BarChart2, TrendingUp } from "lucide-react";
+import MindfulIllustration from "./MindfulIllustration";
 
 // Register Chart.js modules
 ChartJS.register(
@@ -65,7 +64,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
       dateLabels.push(label);
     }
 
-    // Map existing entries to the dates (if no entry, null or 0? Null is better so line has gaps or we can interpolate, but let's do null for no entry)
+    // Map existing entries to the dates
     const entriesMap = new Map<string, number>();
     entries.forEach((entry) => {
       entriesMap.set(entry.date, entry.moodValue);
@@ -84,7 +83,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
     return chartData.values.some((v) => v !== null);
   }, [chartData]);
 
-  // Chart styling based on theme (we can detect theme or use standard colors that look good in both)
+  // Chart styling based on theme (we use slate-500/slate-400 for high-contrast labels)
   const chartOptions: ChartOptions<"line" | "bar"> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -93,10 +92,10 @@ export default function TrendChart({ entries }: TrendChartProps) {
         display: false,
       },
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.9)", // slate-900
+        backgroundColor: "rgba(15, 23, 42, 0.95)", // slate-900
         titleColor: "#f8fafc", // slate-50
-        bodyColor: "#e2e8f0", // slate-200
-        borderColor: "rgba(226, 232, 240, 0.1)",
+        bodyColor: "#f1f5f9", // slate-100
+        borderColor: "rgba(226, 232, 240, 0.15)",
         borderWidth: 1,
         padding: 12,
         cornerRadius: 12,
@@ -119,10 +118,11 @@ export default function TrendChart({ entries }: TrendChartProps) {
           display: false,
         },
         ticks: {
-          color: "#94a3b8", // slate-400
+          color: "#64748b", // slate-500 (WCAG AA compliant)
           font: {
             family: "Inter, sans-serif",
             size: 11,
+            weight: 600,
           },
         },
       },
@@ -137,10 +137,11 @@ export default function TrendChart({ entries }: TrendChartProps) {
         },
         ticks: {
           stepSize: 1,
-          color: "#94a3b8",
+          color: "#64748b", // slate-500 (WCAG AA compliant)
           font: {
             family: "Inter, sans-serif",
             size: 11,
+            weight: 600,
           },
           callback: (value) => {
             const val = value as MoodValue;
@@ -182,14 +183,14 @@ export default function TrendChart({ entries }: TrendChartProps) {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm">
+    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="w-5 h-5 text-indigo-500" />
             <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mood Trends</h2>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
             Visualize your well-being over time
           </p>
         </div>
@@ -199,10 +200,10 @@ export default function TrendChart({ entries }: TrendChartProps) {
           <div className="flex rounded-xl bg-slate-50 dark:bg-slate-800/50 p-1 border border-slate-100 dark:border-slate-800">
             <button
               onClick={() => setChartType("line")}
-              className={`p-1.5 rounded-lg transition-all duration-200 ${
+              className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 chartType === "line"
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  : "text-slate-400 hover:text-slate-650 dark:hover:text-slate-300"
               }`}
               title="Line Chart"
             >
@@ -210,10 +211,10 @@ export default function TrendChart({ entries }: TrendChartProps) {
             </button>
             <button
               onClick={() => setChartType("bar")}
-              className={`p-1.5 rounded-lg transition-all duration-200 ${
+              className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 chartType === "bar"
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                  : "text-slate-400 hover:text-slate-650 dark:hover:text-slate-300"
               }`}
               title="Bar Chart"
             >
@@ -225,20 +226,20 @@ export default function TrendChart({ entries }: TrendChartProps) {
           <div className="flex rounded-xl bg-slate-50 dark:bg-slate-800/50 p-1 border border-slate-100 dark:border-slate-800 flex-1 sm:flex-initial">
             <button
               onClick={() => setTimeRange(7)}
-              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 ${
+              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 timeRange === 7
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  : "text-slate-550 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               7 Days
             </button>
             <button
               onClick={() => setTimeRange(30)}
-              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 ${
+              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 timeRange === 30
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  : "text-slate-550 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               30 Days
@@ -249,25 +250,40 @@ export default function TrendChart({ entries }: TrendChartProps) {
 
       <div className="h-64 sm:h-72 w-full relative">
         {hasData ? (
-          chartType === "line" ? (
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            <Line data={data} options={chartOptions as any} />
-          ) : (
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            <Bar data={data} options={chartOptions as any} />
-          )
+          <div key={`${chartType}-${timeRange}`} className="w-full h-full animate-[fadeIn_0.5s_ease-out_forwards]">
+            {chartType === "line" ? (
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              <Line data={data} options={chartOptions as any} />
+            ) : (
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              <Bar data={data} options={chartOptions as any} />
+            )}
+          </div>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-            <Calendar className="w-10 h-10 text-slate-300 dark:text-slate-700 mb-3" />
-            <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">
+            <MindfulIllustration />
+            <p className="text-sm font-semibold text-slate-750 dark:text-slate-300 mb-1 mt-2">
               Not enough logs yet
             </p>
-            <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
               Start logging your daily mood, and your trends will show up here over the next few days.
             </p>
           </div>
         )}
       </div>
+
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
