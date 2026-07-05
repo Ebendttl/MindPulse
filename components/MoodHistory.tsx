@@ -55,7 +55,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
               placeholder="Search notes, moods or tags..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50/50 text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 dark:placeholder-slate-500 outline-none focus-visible:ring-indigo-500"
+              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50/50 text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 dark:placeholder-slate-500 outline-none focus-visible:ring-teal-500"
             />
           </div>
         )}
@@ -79,16 +79,20 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
         <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
           {filteredEntries.map((entry) => {
             const mood = MOODS[entry.moodValue];
+            const cardBg = mood 
+              ? `${mood.bgLight} dark:${mood.bgDark} border ${mood.borderLight} dark:${mood.borderDark}`
+              : "bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80";
+
             return (
               <div
                 key={entry.id}
-                className="flex items-start justify-between gap-4 p-4 rounded-2xl bg-slate-50/50 hover:bg-slate-50 dark:bg-slate-900/40 dark:hover:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 transition-all duration-300"
+                className={`flex items-start justify-between gap-4 p-4 rounded-2xl ${cardBg} hover:shadow-[0_4px_20px_rgba(0,0,0,0.01)] transition-all duration-300`}
               >
                 <div className="flex items-start gap-4">
                   {/* Mood Icon/Emoji */}
                   <div
-                    className={`flex items-center justify-center w-12 h-12 rounded-xl text-2xl border shadow-sm shrink-0 bg-white dark:bg-slate-900 ${
-                      mood ? "border-slate-100 dark:border-slate-800" : "border-gray-200"
+                    className={`flex items-center justify-center w-12 h-12 rounded-xl text-2xl border shadow-sm shrink-0 bg-white dark:bg-slate-950/40 ${
+                      mood ? `${mood.borderLight} dark:${mood.borderDark}` : "border-gray-200"
                     }`}
                   >
                     <span role="img" aria-label={mood?.label || "Mood"}>
@@ -99,11 +103,11 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   {/* Log Details */}
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                      <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                      <span className={`text-sm font-bold ${mood ? `${mood.textLight} dark:${mood.textDark}` : "text-slate-800 dark:text-slate-200"}`}>
                         {mood?.label || "Unknown"}
                       </span>
                       <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                         {formatDate(entry.date)}
                       </span>
                     </div>
@@ -114,7 +118,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                         {entry.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
+                            className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/60 text-slate-600 border border-slate-200/60 dark:bg-slate-900/40 dark:text-slate-400 dark:border-slate-800"
                           >
                             {tag}
                           </span>
@@ -123,11 +127,11 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                     )}
 
                     {entry.note ? (
-                      <p className="mt-2 text-sm text-slate-700 dark:text-slate-300 bg-white/70 dark:bg-slate-900/80 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800 inline-block max-w-full break-words shadow-sm font-normal">
+                      <p className="mt-2 text-sm text-slate-700 dark:text-slate-300 bg-white/70 dark:bg-slate-900/70 px-3 py-2 rounded-xl border border-slate-200/30 dark:border-slate-800/30 inline-block max-w-full break-words shadow-sm font-normal">
                         {entry.note}
                       </p>
                     ) : (
-                      <p className="mt-2.5 text-xs italic text-slate-500 dark:text-slate-400">
+                      <p className="mt-2.5 text-xs italic text-slate-400 dark:text-slate-500 font-medium">
                         No reflection note attached
                       </p>
                     )}

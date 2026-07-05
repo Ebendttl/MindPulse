@@ -87,7 +87,7 @@ export default function TagSelector({ selectedTags, onChangeTags }: TagSelectorP
               onKeyDown={handleKeyDown}
               aria-label={`Toggle tag: ${tag.name}`}
               aria-pressed={isSelected}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold cursor-pointer transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold cursor-pointer transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 ${
                 isSelected
                   ? `${tag.activeColor} ring-1 scale-[1.03] shadow-sm`
                   : "bg-white border-slate-100 text-slate-500 hover:border-slate-300 hover:bg-slate-50/50 dark:bg-slate-900/40 dark:border-slate-800/80 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800/50"
