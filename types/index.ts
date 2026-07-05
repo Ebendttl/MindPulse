@@ -4,8 +4,15 @@ export interface MoodType {
   value: MoodValue;
   label: string;
   emoji: string;
-  color: string; // Tailwind color class for bg/text
   description: string;
+  colorName: string;
+  bgLight: string;
+  bgDark: string;
+  borderLight: string;
+  borderDark: string;
+  textLight: string;
+  textDark: string;
+  hex: string;
 }
 
 export interface MoodEntry {
