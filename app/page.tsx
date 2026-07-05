@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { MoodEntry, MoodValue } from "@/types";
 import { getMoodEntries, saveMoodEntry, deleteMoodEntry } from "@/lib/storage";
-import { MOODS } from "@/lib/moodData";
+
 import MoodPicker from "@/components/MoodPicker";
 import NoteInput from "@/components/NoteInput";
 import TrendChart from "@/components/TrendChart";
@@ -89,7 +89,7 @@ export default function Home() {
       return;
     }
 
-    const updated = saveMoodEntry({
+    saveMoodEntry({
       date: selectedDate,
       moodValue: selectedMood,
       note: note.trim(),
@@ -305,7 +305,7 @@ export default function Home() {
                     {!isTodayLogged && selectedDateIsToday && (
                       <span className="flex items-center gap-1">
                         <Info className="w-3 h-3 text-indigo-400 shrink-0" />
-                        Log today's mood to keep your logging streak alive!
+                        {"Log today's mood to keep your logging streak alive!"}
                       </span>
                     )}
                   </div>
