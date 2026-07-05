@@ -203,7 +203,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
               className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 chartType === "line"
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-650 dark:hover:text-slate-300"
+                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
               }`}
               title="Line Chart"
             >
@@ -214,7 +214,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
               className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 chartType === "bar"
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-650 dark:hover:text-slate-300"
+                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
               }`}
               title="Bar Chart"
             >
@@ -229,7 +229,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
               className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 timeRange === 7
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-550 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               7 Days
@@ -239,7 +239,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
               className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 timeRange === 30
                   ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-550 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
               }`}
             >
               30 Days
@@ -262,7 +262,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
             <MindfulIllustration />
-            <p className="text-sm font-semibold text-slate-750 dark:text-slate-300 mb-1 mt-2">
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
               Not enough logs yet
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">

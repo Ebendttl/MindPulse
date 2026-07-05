@@ -64,7 +64,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
       {entries.length === 0 ? (
         <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
           <MindfulIllustration />
-          <p className="text-sm font-semibold text-slate-750 dark:text-slate-300 mb-1 mt-2">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
             No entries logged yet
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
@@ -99,7 +99,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   {/* Log Details */}
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                      <span className="text-sm font-bold text-slate-850 dark:text-slate-200">
+                      <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
                         {mood?.label || "Unknown"}
                       </span>
                       <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
@@ -114,7 +114,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                         {entry.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-350 dark:border-slate-700"
+                            className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
                           >
                             {tag}
                           </span>

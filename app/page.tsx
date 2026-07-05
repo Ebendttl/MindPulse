@@ -278,6 +278,9 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Dashboard stats summary indicator (spans full width above grid columns) */}
+        <StatsSummary entries={entries} />
+
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
@@ -298,7 +301,7 @@ export default function Home() {
                       Save a moment to map your mental landscape
                     </p>
                   </div>
-
+ 
                   {/* Date Input */}
                   <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-100 dark:border-slate-800 w-full sm:w-auto">
                     <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -323,7 +326,7 @@ export default function Home() {
                       <h4 className="text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-wider">
                         {selectedMood === null ? "Welcome to MindPulse" : "Almost there"}
                       </h4>
-                      <p className="text-xs text-indigo-950 dark:text-slate-350 font-semibold mt-0.5 leading-relaxed">
+                      <p className="text-xs text-indigo-900/90 dark:text-indigo-200 font-semibold mt-0.5 leading-relaxed">
                         {selectedMood === null
                           ? "Start here — log how you're feeling today by choosing one of the emojis below."
                           : "Great! Next, select any context tags, add an optional reflection note, and click 'Log Reflection'."}
@@ -362,9 +365,6 @@ export default function Home() {
                 </div>
               </form>
             </section>
-
-            {/* Dashboard stats summary indicator */}
-            <StatsSummary entries={entries} />
 
             {/* Insights Card */}
             <InsightsCard entries={entries} />
@@ -407,9 +407,9 @@ export default function Home() {
                 MindPulse © 2026. Built with mindfulness.
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-550 dark:text-slate-450">
+            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400">
               <span>Aligned with</span>
-              <span className="text-emerald-650 dark:text-emerald-400">UN SDG Goal 3: Good Health & Well-being</span>
+              <span className="text-emerald-600 dark:text-emerald-400">UN SDG Goal 3: Good Health & Well-being</span>
             </div>
           </div>
           <div className="w-full flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-900 gap-3">

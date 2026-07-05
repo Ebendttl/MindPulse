@@ -31,7 +31,7 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
             <h3 className="text-xs font-bold text-indigo-800 dark:text-indigo-300 uppercase tracking-wider mb-1">
               Active Correlation
             </h3>
-            <p className="text-sm text-indigo-950 dark:text-slate-350 leading-relaxed font-semibold">
+            <p className="text-sm text-indigo-900 dark:text-indigo-200 leading-relaxed font-semibold">
               {correlationInsight}
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
       ) : (
         <div className="flex flex-col items-center justify-center py-6 text-center">
           <MindfulIllustration />
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-305 mb-1 mt-2">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
             Not enough data yet
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">

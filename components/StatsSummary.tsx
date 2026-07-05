@@ -61,7 +61,7 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
               {stats.average > 0 ? stats.average : "—"}
             </span>
             {averageMoodDetails && (
-              <span className="text-xs text-slate-550 dark:text-slate-350 font-semibold">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
                 ({averageMoodDetails.emoji} {averageMoodDetails.label})
               </span>
             )}
@@ -82,7 +82,7 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
             <span className="text-2xl font-black text-slate-800 dark:text-slate-100">
               {streak} {streak === 1 ? "day" : "days"}
             </span>
-            <span className="text-xs text-slate-550 dark:text-slate-350 font-semibold">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
               consecutive
             </span>
           </div>
