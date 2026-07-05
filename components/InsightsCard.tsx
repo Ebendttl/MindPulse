@@ -37,7 +37,7 @@ export default function InsightsCard({ entries }: InsightsCardProps) {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-6 text-center">
+        <div className="flex flex-col items-center justify-center py-3 text-center">
           <MindfulIllustration />
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
             Not enough data yet

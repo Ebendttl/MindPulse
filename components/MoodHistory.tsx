@@ -62,7 +62,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
       </div>
 
       {entries.length === 0 ? (
-        <div className="text-center py-12 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+        <div className="text-center py-8 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
           <MindfulIllustration />
           <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
             No entries logged yet
