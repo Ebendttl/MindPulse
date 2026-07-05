@@ -71,7 +71,7 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
         </div>
       ) : filteredEntries.length === 0 ? (
         <div className="text-center py-12 text-slate-400 dark:text-slate-500 text-sm">
-          No entries matched "{searchTerm}"
+          No entries matched &quot;{searchTerm}&quot;
         </div>
       ) : (
         <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">

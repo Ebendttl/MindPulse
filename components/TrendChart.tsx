@@ -158,6 +158,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
         label: "Mood Trend",
         data: chartData.values,
         borderColor: "#6366f1", // indigo-500
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         backgroundColor: (context: any) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
@@ -249,8 +250,10 @@ export default function TrendChart({ entries }: TrendChartProps) {
       <div className="h-64 sm:h-72 w-full relative">
         {hasData ? (
           chartType === "line" ? (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             <Line data={data} options={chartOptions as any} />
           ) : (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             <Bar data={data} options={chartOptions as any} />
           )
         ) : (
