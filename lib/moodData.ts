@@ -10,17 +10,17 @@ export const MOODS: Record<MoodValue, MoodType> = {
   },
   5: {
     value: 5,
-    label: "Good",
-    emoji: "😊",
-    color: "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 active:bg-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900/50 dark:text-emerald-300",
-    description: "Happy & content",
-  },
-  4: {
-    value: 4,
     label: "Peaceful",
     emoji: "😌",
     color: "bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100 active:bg-teal-200 dark:bg-teal-950/30 dark:border-teal-900/50 dark:text-teal-300",
     description: "Calm & relaxed",
+  },
+  4: {
+    value: 4,
+    label: "Good",
+    emoji: "😊",
+    color: "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 active:bg-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900/50 dark:text-emerald-300",
+    description: "Happy & content",
   },
   3: {
     value: 3,
