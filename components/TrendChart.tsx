@@ -15,8 +15,9 @@ import {
 } from "chart.js";
 import { MoodEntry, MoodValue } from "@/types";
 import { MOODS } from "@/lib/moodData";
+import { MOOD_COLORS, BRAND, SURFACE } from "@/lib/moodColors";
 import { BarChart2, TrendingUp } from "lucide-react";
-import MindfulIllustration from "./MindfulIllustration";
+import { PulseWaveIllustration } from "./MindfulIllustration";
 
 // Register Chart.js modules
 ChartJS.register(
@@ -83,7 +84,9 @@ export default function TrendChart({ entries }: TrendChartProps) {
     return chartData.values.some((v) => v !== null);
   }, [chartData]);
 
-  // Chart styling based on theme (we use slate-500/slate-400 for high-contrast labels)
+  // Text-secondary for grid/tick colors
+  const gridColor = `${SURFACE.light.textSecondary}14`; // 8% opacity
+
   const chartOptions: ChartOptions<"line" | "bar"> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -92,10 +95,10 @@ export default function TrendChart({ entries }: TrendChartProps) {
         display: false,
       },
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.95)", // slate-900
-        titleColor: "#f8fafc", // slate-50
-        bodyColor: "#f1f5f9", // slate-100
-        borderColor: "rgba(226, 232, 240, 0.15)",
+        backgroundColor: SURFACE.dark.card,
+        titleColor: SURFACE.dark.textPrimary,
+        bodyColor: SURFACE.dark.textPrimary,
+        borderColor: SURFACE.dark.cardBorder,
         borderWidth: 1,
         padding: 12,
         cornerRadius: 12,
@@ -118,7 +121,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
           display: false,
         },
         ticks: {
-          color: "#64748b", // slate-500 (WCAG AA compliant)
+          color: SURFACE.light.textSecondary,
           font: {
             family: "Inter, sans-serif",
             size: 11,
@@ -130,14 +133,15 @@ export default function TrendChart({ entries }: TrendChartProps) {
         min: 1,
         max: 6,
         grid: {
-          color: "rgba(148, 163, 184, 0.12)",
+          color: gridColor,
+          lineWidth: 1,
         },
         border: {
           dash: [4, 4],
         },
         ticks: {
           stepSize: 1,
-          color: "#64748b", // slate-500 (WCAG AA compliant)
+          color: SURFACE.light.textSecondary,
           font: {
             family: "Inter, sans-serif",
             size: 11,
@@ -152,73 +156,85 @@ export default function TrendChart({ entries }: TrendChartProps) {
     },
   };
 
+  // Per-mood point/bar colors
+  const pointColors = chartData.values.map((v) =>
+    v !== null ? MOOD_COLORS[v as MoodValue].base : "transparent"
+  );
+
   const data = {
     labels: chartData.labels,
     datasets: [
       {
         label: "Mood Trend",
         data: chartData.values,
+        // Line border: soft gradient-like appearance via segment coloring
         borderColor: chartType === "line"
-          ? "rgba(148, 163, 184, 0.35)"
-          : chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex : "transparent"),
+          ? SURFACE.light.textSecondary + "59" // 35% opacity muted line
+          : pointColors,
+        borderWidth: chartType === "line" ? 3 : 1,
         backgroundColor: chartType === "line"
           ? (context: { chart: { ctx: CanvasRenderingContext2D; chartArea?: { top: number; bottom: number; left: number; right: number; width: number; height: number } } }) => {
               const chart = context.chart;
               const { ctx, chartArea } = chart;
-              if (!chartArea) return "rgba(20, 184, 166, 0.05)";
+              if (!chartArea) return `${BRAND.primaryEnd}0D`;
               const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-              gradient.addColorStop(0, "rgba(20, 184, 166, 0.15)");
-              gradient.addColorStop(1, "rgba(20, 184, 166, 0.0)");
+              gradient.addColorStop(0, `${BRAND.primaryEnd}26`); // 15% opacity
+              gradient.addColorStop(1, `${BRAND.primaryEnd}00`); // 0% opacity
               return gradient;
             }
-          : chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex + "dd" : "transparent"),
+          : pointColors.map(c => c !== "transparent" ? c + "DD" : "transparent"),
         fill: chartType === "line",
         tension: 0.35,
-        pointBackgroundColor: chartData.values.map((v) => v !== null ? MOODS[v as MoodValue].hex : "transparent"),
-        pointBorderColor: chartData.values.map((v) => v !== null ? "#ffffff" : "transparent"),
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors.map(c => c !== "transparent" ? "#FFFFFF" : "transparent"),
         pointBorderWidth: 2,
         pointRadius: chartType === "line" ? chartData.values.map((v) => v !== null ? 6 : 0) : 0,
         pointHoverRadius: chartType === "line" ? 8 : 0,
         spanGaps: true,
         borderRadius: chartType === "bar" ? 8 : 0,
+        borderCapStyle: "round" as const,
       },
     ],
   };
 
+  // Toggle button styles
+  const activeToggleStyle = {
+    backgroundColor: BRAND.primary,
+    color: "#FFFFFF",
+  };
+  const inactiveToggleStyle = {
+    backgroundColor: "transparent",
+    color: "var(--text-secondary)",
+  };
+
   return (
-    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:shadow-md transition-shadow duration-300">
+    <div className="bg-card border border-card-border rounded-[20px] p-6 transition-shadow duration-300 hover:shadow-md w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className="w-5 h-5 text-teal-500" />
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mood Trends</h2>
+            <TrendingUp className="w-5 h-5" style={{ color: BRAND.primaryEnd }} />
+            <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>Mood Trends</h2>
           </div>
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
             Visualize your well-being over time
           </p>
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
           {/* Chart Type Toggle */}
-          <div className="flex rounded-xl bg-slate-50 dark:bg-slate-800/50 p-1 border border-slate-100 dark:border-slate-800">
+          <div className="flex rounded-xl p-1 border border-card-border" style={{ backgroundColor: "var(--background)" }}>
             <button
               onClick={() => setChartType("line")}
-              className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-                chartType === "line"
-                  ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-              }`}
+              className="p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={chartType === "line" ? activeToggleStyle : inactiveToggleStyle}
               title="Line Chart"
             >
               <TrendingUp className="w-4 h-4" />
             </button>
             <button
               onClick={() => setChartType("bar")}
-              className={`p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-                chartType === "bar"
-                  ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-              }`}
+              className="p-1.5 rounded-lg transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={chartType === "bar" ? activeToggleStyle : inactiveToggleStyle}
               title="Bar Chart"
             >
               <BarChart2 className="w-4 h-4" />
@@ -226,24 +242,18 @@ export default function TrendChart({ entries }: TrendChartProps) {
           </div>
 
           {/* Time Range Selector */}
-          <div className="flex rounded-xl bg-slate-50 dark:bg-slate-800/50 p-1 border border-slate-100 dark:border-slate-800 flex-1 sm:flex-initial">
+          <div className="flex rounded-xl p-1 border border-card-border flex-1 sm:flex-initial" style={{ backgroundColor: "var(--background)" }}>
             <button
               onClick={() => setTimeRange(7)}
-              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-                timeRange === 7
-                  ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-              }`}
+              className="flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={timeRange === 7 ? activeToggleStyle : inactiveToggleStyle}
             >
               7 Days
             </button>
             <button
               onClick={() => setTimeRange(30)}
-              className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
-                timeRange === 30
-                  ? "bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-400"
-                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-              }`}
+              className="flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={timeRange === 30 ? activeToggleStyle : inactiveToggleStyle}
             >
               30 Days
             </button>
@@ -253,7 +263,7 @@ export default function TrendChart({ entries }: TrendChartProps) {
 
       <div className="h-64 sm:h-72 w-full relative">
         {hasData ? (
-          <div key={`${chartType}-${timeRange}`} className="w-full h-full animate-[fadeIn_0.5s_ease-out_forwards]">
+          <div key={`${chartType}-${timeRange}`} className="w-full h-full" style={{ animation: "fadeIn 0.5s ease-out forwards" }}>
             {chartType === "line" ? (
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               <Line data={data} options={chartOptions as any} />
@@ -263,30 +273,17 @@ export default function TrendChart({ entries }: TrendChartProps) {
             )}
           </div>
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-            <MindfulIllustration />
-            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 rounded-2xl border border-dashed border-card-border" style={{ backgroundColor: "var(--background)" }}>
+            <PulseWaveIllustration />
+            <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
               Not enough logs yet
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
+            <p className="text-xs max-w-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
               Start logging your daily mood, and your trends will show up here over the next few days.
             </p>
           </div>
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(4px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

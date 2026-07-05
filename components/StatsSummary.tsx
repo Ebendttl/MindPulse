@@ -2,8 +2,9 @@ import React, { useMemo } from "react";
 import { MoodEntry, MoodValue } from "@/types";
 import { getMoodStats } from "@/lib/storage";
 import { MOODS } from "@/lib/moodData";
+import { MOOD_COLORS, BRAND } from "@/lib/moodColors";
 import { calculateStreak } from "@/lib/streak";
-import { Heart, Award, Sparkles, Smile } from "lucide-react";
+import { Heart, Award, Smile } from "lucide-react";
 
 interface StatsSummaryProps {
   entries: MoodEntry[];
@@ -20,6 +21,13 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
     // Find the closest mood value
     const closestValue = Math.round(avg) as MoodValue;
     return MOODS[closestValue];
+  }, [stats.average]);
+
+  // The accent color for the average mood card depends on the current average
+  const avgAccentColor = useMemo(() => {
+    if (stats.average === 0) return "#B0A8B8"; // text-secondary fallback
+    const closestValue = Math.round(stats.average) as MoodValue;
+    return MOOD_COLORS[closestValue].base;
   }, [stats.average]);
 
   // Calculate logging streak (consecutive days) using our lib/streak
@@ -48,20 +56,48 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-6">
       {/* Average Mood Card */}
-      <div className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 flex items-center gap-4 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-md transition-shadow duration-300">
-        <div className="w-12 h-12 rounded-[18px] bg-gradient-to-tr from-amber-100/60 to-teal-50/60 dark:from-amber-950/40 dark:to-teal-950/40 flex items-center justify-center shrink-0 border border-amber-200/20 dark:border-amber-800/20">
-          <Smile className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+      <div
+        className="bg-card border border-card-border rounded-[20px] p-6 flex items-center gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative"
+        style={{
+          borderLeftWidth: "4px",
+          borderLeftColor: avgAccentColor,
+        }}
+      >
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+          style={{
+            backgroundColor: `${avgAccentColor}26`, // 15% opacity
+          }}
+        >
+          <Smile className="w-6 h-6" style={{ color: avgAccentColor }} />
         </div>
         <div>
-          <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+          <span
+            className="text-xs font-bold uppercase block"
+            style={{
+              letterSpacing: "0.05em",
+              color: "var(--text-secondary)",
+              fontSize: "12px",
+            }}
+          >
             Average Mood
           </span>
           <div className="flex items-baseline gap-2 mt-0.5">
-            <span className="text-2xl font-black text-slate-800 dark:text-slate-100">
+            <span
+              className="font-black"
+              style={{
+                fontSize: "28px",
+                lineHeight: "1.2",
+                color: "var(--text-primary)",
+              }}
+            >
               {stats.average > 0 ? stats.average : "—"}
             </span>
             {averageMoodDetails && (
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              <span
+                className="text-xs font-semibold"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 ({averageMoodDetails.emoji} {averageMoodDetails.label})
               </span>
             )}
@@ -70,19 +106,47 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
       </div>
 
       {/* Streak Card */}
-      <div className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 flex items-center gap-4 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-md transition-shadow duration-300">
-        <div className={`w-12 h-12 rounded-[18px] bg-gradient-to-tr from-emerald-100/60 to-teal-50/60 dark:from-emerald-950/40 dark:to-teal-950/40 flex items-center justify-center shrink-0 border border-emerald-200/20 dark:border-emerald-800/20 ${streak > 0 ? "animate-[bounce_2.5s_ease-in-out_infinite] shadow-[0_0_15px_rgba(16,185,129,0.25)]" : ""}`}>
-          <Award className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+      <div
+        className="bg-card border border-card-border rounded-[20px] p-6 flex items-center gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative"
+        style={{
+          borderLeftWidth: "4px",
+          borderLeftColor: BRAND.primary,
+        }}
+      >
+        <div
+          className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${streak > 0 ? "animate-[bounce_2.5s_ease-in-out_infinite]" : ""}`}
+          style={{
+            backgroundColor: `${BRAND.primary}26`, // 15% opacity
+          }}
+        >
+          <Award className="w-6 h-6" style={{ color: BRAND.primary }} />
         </div>
         <div>
-          <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+          <span
+            className="text-xs font-bold uppercase block"
+            style={{
+              letterSpacing: "0.05em",
+              color: "var(--text-secondary)",
+              fontSize: "12px",
+            }}
+          >
             Logging Streak
           </span>
           <div className="flex items-baseline gap-2 mt-0.5">
-            <span className="text-2xl font-black text-slate-800 dark:text-slate-100">
+            <span
+              className="font-black"
+              style={{
+                fontSize: "28px",
+                lineHeight: "1.2",
+                color: "var(--text-primary)",
+              }}
+            >
               {streak} {streak === 1 ? "day" : "days"}
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+            <span
+              className="text-xs font-semibold"
+              style={{ color: "var(--text-secondary)" }}
+            >
               consecutive
             </span>
           </div>
@@ -90,18 +154,38 @@ export default function StatsSummary({ entries }: StatsSummaryProps) {
       </div>
 
       {/* SDG 3 / Wellness Tip Card */}
-      <div className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 flex items-start gap-4 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-md transition-shadow duration-300 md:col-span-1">
-        <div className="w-12 h-12 rounded-[18px] bg-gradient-to-tr from-rose-100/60 to-orange-50/40 dark:from-rose-950/40 dark:to-orange-950/20 flex items-center justify-center shrink-0 border border-rose-200/20 dark:border-rose-800/20 mt-0.5">
-          <Heart className="w-6 h-6 text-rose-500 fill-rose-100/30 dark:fill-none" />
+      <div
+        className="bg-card border border-card-border rounded-[20px] p-6 flex items-start gap-4 transition-shadow duration-300 hover:shadow-md overflow-hidden relative md:col-span-1"
+        style={{
+          borderLeftWidth: "4px",
+          borderLeftColor: "#E8837A",
+        }}
+      >
+        <div
+          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+          style={{
+            backgroundColor: "rgba(232, 131, 122, 0.15)",
+          }}
+        >
+          <Heart className="w-6 h-6" style={{ color: "#E8837A" }} />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <span
+              className="text-xs font-bold uppercase"
+              style={{
+                letterSpacing: "0.05em",
+                color: "var(--text-secondary)",
+                fontSize: "12px",
+              }}
+            >
               SDG 3 Well-being Tip
             </span>
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
           </div>
-          <p className="text-xs leading-relaxed text-slate-700 dark:text-slate-300 font-semibold">
+          <p
+            className="text-xs leading-relaxed font-semibold"
+            style={{ color: "var(--text-primary)" }}
+          >
             {wellBeingTip}
           </p>
         </div>

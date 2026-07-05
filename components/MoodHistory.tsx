@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { MoodEntry } from "@/types";
 import { MOODS } from "@/lib/moodData";
+import { MOOD_COLORS, MOOD_COLORS_DARK } from "@/lib/moodColors";
 import { Trash2, Calendar, Search } from "lucide-react";
-import MindfulIllustration from "./MindfulIllustration";
+import { BreathingCircleIllustration } from "./MindfulIllustration";
 
 interface MoodHistoryProps {
   entries: MoodEntry[];
@@ -35,65 +36,82 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
   };
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-md transition-shadow duration-300">
+    <div className="w-full bg-card border border-card-border rounded-[20px] p-6 transition-shadow duration-300 hover:shadow-md">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Calendar className="w-5 h-5 text-emerald-500" />
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mood History</h2>
+            <Calendar className="w-5 h-5" style={{ color: MOOD_COLORS[4].base }} />
+            <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>Mood History</h2>
           </div>
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+          <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
             An archive of your daily well-being reflections
           </p>
         </div>
 
         {entries.length > 0 && (
           <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-secondary)" }} />
             <input
               type="text"
               placeholder="Search notes, moods or tags..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border border-slate-200 bg-slate-50/50 text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-200 dark:placeholder-slate-500 outline-none focus-visible:ring-teal-500"
+              className="w-full pl-9 pr-4 py-2 rounded-xl text-xs border bg-background outline-none transition-all duration-200 focus:ring-2 focus:ring-offset-1"
+              style={{
+                borderColor: "var(--card-border)",
+                color: "var(--text-primary)",
+                // @ts-expect-error CSS custom properties
+                "--tw-ring-color": "#6C63FF40",
+              }}
             />
           </div>
         )}
       </div>
 
       {entries.length === 0 ? (
-        <div className="text-center py-8 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-          <MindfulIllustration />
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 mt-2">
+        <div
+          className="text-center rounded-2xl border border-dashed"
+          style={{
+            backgroundColor: "var(--background)",
+            borderColor: "var(--card-border)",
+          }}
+        >
+          <BreathingCircleIllustration />
+          <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>
             No entries logged yet
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
+          <p className="text-xs max-w-xs mx-auto leading-relaxed pb-6" style={{ color: "var(--text-secondary)" }}>
             Record how you are feeling above to start building your journey log.
           </p>
         </div>
       ) : filteredEntries.length === 0 ? (
-        <div className="text-center py-12 text-slate-500 dark:text-slate-400 text-sm">
+        <div className="text-center py-12 text-sm" style={{ color: "var(--text-secondary)" }}>
           No entries matched &quot;{searchTerm}&quot;
         </div>
       ) : (
-        <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+        <div className="space-y-3 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
           {filteredEntries.map((entry) => {
             const mood = MOODS[entry.moodValue];
-            const cardBg = mood 
-              ? `${mood.bgLight} dark:${mood.bgDark} border ${mood.borderLight} dark:${mood.borderDark}`
-              : "bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80";
+            const colors = MOOD_COLORS[entry.moodValue];
+            const darkColors = MOOD_COLORS_DARK[entry.moodValue];
 
             return (
               <div
                 key={entry.id}
-                className={`flex items-start justify-between gap-4 p-4 rounded-2xl ${cardBg} hover:shadow-[0_4px_20px_rgba(0,0,0,0.01)] transition-all duration-300`}
+                className="flex items-start justify-between gap-4 p-4 rounded-2xl border transition-all duration-200 hover:shadow-sm dark:hover:shadow-sm"
+                style={{
+                  backgroundColor: colors.tint,
+                  borderColor: `${colors.base}33`, // 20% opacity
+                }}
               >
                 <div className="flex items-start gap-4">
                   {/* Mood Icon/Emoji */}
                   <div
-                    className={`flex items-center justify-center w-12 h-12 rounded-xl text-2xl border shadow-sm shrink-0 bg-white dark:bg-slate-950/40 ${
-                      mood ? `${mood.borderLight} dark:${mood.borderDark}` : "border-gray-200"
-                    }`}
+                    className="flex items-center justify-center w-12 h-12 rounded-xl text-2xl shrink-0 border"
+                    style={{
+                      backgroundColor: "var(--card)",
+                      borderColor: `${colors.base}33`,
+                    }}
                   >
                     <span role="img" aria-label={mood?.label || "Mood"}>
                       {mood?.emoji || "❓"}
@@ -103,11 +121,14 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   {/* Log Details */}
                   <div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                      <span className={`text-sm font-bold ${mood ? `${mood.textLight} dark:${mood.textDark}` : "text-slate-800 dark:text-slate-200"}`}>
+                      <span
+                        className="text-sm font-bold"
+                        style={{ color: colors.text }}
+                      >
                         {mood?.label || "Unknown"}
                       </span>
-                      <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                      <span style={{ color: "var(--card-border)" }} className="hidden sm:inline">•</span>
+                      <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
                         {formatDate(entry.date)}
                       </span>
                     </div>
@@ -118,7 +139,12 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                         {entry.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/60 text-slate-600 border border-slate-200/60 dark:bg-slate-900/40 dark:text-slate-400 dark:border-slate-800"
+                            className="px-2 py-0.5 rounded-full text-[10px] font-bold border"
+                            style={{
+                              backgroundColor: "var(--card)",
+                              color: "var(--text-secondary)",
+                              borderColor: "var(--card-border)",
+                            }}
                           >
                             {tag}
                           </span>
@@ -127,11 +153,19 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                     )}
 
                     {entry.note ? (
-                      <p className="mt-2 text-sm text-slate-700 dark:text-slate-300 bg-white/70 dark:bg-slate-900/70 px-3 py-2 rounded-xl border border-slate-200/30 dark:border-slate-800/30 inline-block max-w-full break-words shadow-sm font-normal">
+                      <p
+                        className="mt-2 text-sm px-3 py-2 rounded-xl inline-block max-w-full break-words font-normal border"
+                        style={{
+                          backgroundColor: "var(--card)",
+                          color: "var(--text-primary)",
+                          borderColor: "var(--card-border)",
+                          opacity: 0.9,
+                        }}
+                      >
                         {entry.note}
                       </p>
                     ) : (
-                      <p className="mt-2.5 text-xs italic text-slate-400 dark:text-slate-500 font-medium">
+                      <p className="mt-2.5 text-xs italic font-medium" style={{ color: "var(--text-secondary)", opacity: 0.7 }}>
                         No reflection note attached
                       </p>
                     )}
@@ -143,8 +177,11 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
                   type="button"
                   onClick={() => onDeleteEntry(entry.id)}
                   aria-label={`Delete entry for ${formatDate(entry.date)}`}
-                  className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all duration-300 dark:text-slate-600 dark:hover:text-rose-400 dark:hover:bg-rose-950/30 outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
+                  className="p-2 hover:bg-rose-50 rounded-xl transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-rose-500 dark:hover:bg-rose-950/30"
+                  style={{ color: "var(--text-secondary)" }}
                   title="Delete entry"
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#E8837A"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; }}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -153,6 +190,13 @@ export default function MoodHistory({ entries, onDeleteEntry }: MoodHistoryProps
           })}
         </div>
       )}
+
+      {/* Dark mode style overrides for history entries */}
+      <style jsx>{`
+        .dark .space-y-3 > div {
+          background-color: var(--background) !important;
+        }
+      `}</style>
     </div>
   );
 }
